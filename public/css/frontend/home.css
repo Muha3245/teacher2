@@ -1,0 +1,385 @@
+:root {
+    --primary-red: #ea4c54;
+    --primary-red-hover: #d13b43;
+    --bg-pink-light: #fff5f6;
+    --text-dark: #1e1e2f;
+    --text-muted: #6c757d;
+    --card-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+    --star-color: #f5c518;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #ffffff;
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
+
+/* --- Navbar --- */
+.navbar {
+    padding: 2rem 0;
+    background: transparent;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    color: var(--primary-red) !important;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: #333 !important;
+    margin: 0 10px;
+    font-size: 0.95rem;
+}
+
+.btn-nav-outline {
+    border: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.btn-nav-primary {
+    background-color: #fecdd3;
+    color: #9f1239;
+    border-radius: 50px;
+    padding: 8px 25px;
+    font-weight: 700;
+    border: none;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    padding: 80px 0 100px;
+    position: relative;
+    text-align: center;
+    background-color: #ffffff;
+    overflow: hidden;
+    /* Important for containing background shapes */
+}
+
+/* Base style for all background shapes */
+.bg-shape {
+    position: absolute;
+    opacity: 0.8;
+    z-index: 0;
+    /* Ensures shapes are behind the content */
+}
+
+/* 1. Top Left Pink Shape */
+.bg-shape-1 {
+    top: -5%;
+    left: -15%;
+    width: 400px;
+    height: 350px;
+    background-color: #ffeef0;
+    /* Light Pink */
+    border-radius: 40% 60% 70% 30% / 40% 50% 50% 60%;
+    transform: rotate(-10deg);
+}
+
+/* 2. Top Right Pink Shape */
+.bg-shape-2 {
+    top: -5%;
+    right: -10%;
+    width: 350px;
+    height: 300px;
+    background-color: #fff2f3;
+    /* Very Light Pink */
+    border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+    transform: rotate(15deg);
+}
+
+/* 3. Bottom Left Blue/Grey Shape */
+.bg-shape-3 {
+    bottom: -10%;
+    left: -10%;
+    width: 450px;
+    height: 300px;
+    background-color: #f0f4f8;
+    /* Light Blue/Grey */
+    border-radius: 30% 70% 50% 50% / 50% 50% 70% 30%;
+    transform: rotate(5deg);
+    opacity: 0.9;
+}
+
+/* 4. Bottom Right Yellow/Orange Shape */
+.bg-shape-4 {
+    bottom: -5%;
+    right: -15%;
+    width: 300px;
+    height: 250px;
+    background-color: #fff8f0;
+    /* Light Yellow/Orange */
+    border-radius: 60% 40% 40% 60% / 70% 30% 70% 30%;
+    transform: rotate(-5deg);
+}
+
+/* Ensure content and decorations are above the large shapes */
+.hero-section .container,
+.hero-section>.decoration {
+    position: relative;
+    z-index: 2;
+    /* Content layer */
+}
+
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #111;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+
+.btn-hero-primary {
+    background-color: var(--primary-red);
+    color: white;
+    padding: 15px 40px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s;
+    box-shadow: 0 10px 20px rgba(234, 76, 84, 0.2);
+}
+
+.btn-hero-primary:hover {
+    background-color: var(--primary-red-hover);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-hero-outline {
+    background-color: transparent;
+    border: 2px solid #e5e7eb;
+    color: #4b5563;
+    padding: 15px 40px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-left: 15px;
+    transition: all 0.3s;
+}
+
+.btn-hero-outline:hover {
+    border-color: #d1d5db;
+    background-color: #f9fafb;
+}
+
+/* Hero Decorations (Small Floating Icons) */
+.decoration {
+    position: absolute;
+    z-index: 3;
+    /* Highest z-index for floating items */
+}
+
+.dec-arrow {
+    top: 55%;
+    left: 15%;
+    color: var(--primary-red);
+    font-size: 3rem;
+    transform: rotate(135deg);
+}
+
+/* Decoration for Donut shape */
+.dec-donut {
+    top: 50%;
+    left: 20%;
+    width: 50px;
+    height: 50px;
+    border: 4px solid #ea4c54;
+    border-radius: 50%;
+    clip-path: circle(25% at 50% 50%);
+    background-color: transparent;
+    transform: scale(1.5);
+}
+
+/* New Star element for variety */
+.dec-star {
+    top: 25%;
+    left: 25%;
+    color: #fbbf24;
+    font-size: 1.5rem;
+    transform: rotate(-15deg);
+}
+
+/* Lock/Stamp Element */
+.dec-stamp-lock {
+    top: 30%;
+    right: 15%;
+    width: 80px;
+    height: 80px;
+    border: 2px solid #a0a0a0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(15deg);
+}
+
+.dec-stamp-lock .lock-text {
+    font-size: 10px;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.dec-squiggle {
+    bottom: 20%;
+    right: 25%;
+    color: #f59e0b;
+    font-size: 2rem;
+}
+
+/* Small dots and other elements from the image */
+.dec-dot-small-blue {
+    top: 15%;
+    left: 35%;
+    width: 8px;
+    height: 8px;
+    background-color: #60a5fa;
+    border-radius: 50%;
+}
+
+.dec-dot-big-pink {
+    bottom: 15%;
+    right: 20%;
+    width: 15px;
+    height: 15px;
+    background-color: #fca5a5;
+    border-radius: 50%;
+}
+
+/* --- End Hero Decorations --- */
+
+
+/* --- Section Styling --- */
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-tag {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9ca3af;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+/* --- Cards --- */
+.custom-card {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+.custom-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--card-shadow);
+}
+
+.card-icon-box {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.card-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 20px;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.rating-stars {
+    color: var(--star-color);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+/* --- Testimonial / Categories Section --- */
+.testimonial-grid-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    border: 1px solid #f3f4f6;
+}
+
+.user-mini {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-mini img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: black;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: #111;
+    color: #fff;
+    padding: 60px 0;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

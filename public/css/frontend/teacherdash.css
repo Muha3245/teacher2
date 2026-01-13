@@ -1,0 +1,263 @@
+:root {
+    --sidebar-width: 260px;
+    --primary-color: #4e73df;
+    --bg-light: #f8f9fc;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-light);
+}
+
+/* Layout Structure */
+#wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid #e3e6f0;
+    transition: all 0.3s;
+}
+
+#content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.nav-link {
+    color: #4e5e7a;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 4px 15px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #f0f4ff;
+    color: var(--primary-color);
+}
+
+.nav-link i {
+    margin-right: 10px;
+    width: 20px;
+}
+
+#search-results-container {
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+
+.list-group-item-action:hover {
+    background-color: #f8f9fc;
+    color: #4e73df;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+        position: fixed;
+        z-index: 1000;
+        height: 100%;
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+
+
+
+.profile-tabs .nav-link {
+    border: none;
+    color: #6c757d;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid transparent;
+}
+
+.profile-tabs .nav-link.active {
+    color: #4e73df;
+    background: transparent;
+    border-bottom: 2px solid #4e73df;
+}
+
+.item-card {
+    background: #f8f9fc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #e3e6f0;
+    transition: all 0.2s;
+}
+
+.item-card:hover {
+    border-color: #4e73df;
+    background: #fff;
+}
+
+.edit-btn {
+    color: #4e73df;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.edit-btn:hover {
+    background: #eaecf4;
+}
+
+.edit-dropdown-box {
+    background: #fff;
+    border: 1px solid #d1d3e2;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+    display: none;
+    /* Controlled by JS or Bootstrap Collapse */
+}
+
+
+
+
+/* =========================
+   Select2 – Input Styling
+   ========================= */
+
+.select2-container {
+    width: 100% !important;
+    font-size: 0.95rem;
+}
+
+/* Main input */
+.select2-container .select2-selection--single {
+    height: 42px;
+    padding: 6px 12px;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    transition: all 0.15s ease-in-out;
+}
+
+/* Text inside input */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #212529;
+    padding-left: 0;
+    line-height: normal;
+}
+
+/* Placeholder text */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #6c757d;
+}
+
+/* Arrow */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px;
+}
+
+/* Focus state */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
+}
+
+/* =========================
+   Dropdown Styling
+   ========================= */
+
+.select2-dropdown {
+    border-radius: 0.75rem;
+    border: 1px solid #dee2e6;
+    padding: 0.25rem;
+}
+
+/* Remove bullets */
+.select2-results__options {
+    list-style: none;
+    padding-left: 0;
+}
+
+/* Option item */
+.select2-results__option {
+    padding: 10px 14px;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease-in-out;
+}
+
+/* Hover */
+.select2-results__option--highlighted {
+    background-color: #f1f5ff;
+    color: #0d6efd;
+}
+
+/* Selected option */
+.select2-results__option--selected {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* =========================
+   Search Input (Dropdown)
+   ========================= */
+
+.select2-search--dropdown .select2-search__field {
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    margin: 6px;
+    font-size: 0.9rem;
+}
+
+/* Search focus */
+.select2-search--dropdown .select2-search__field:focus {
+    border-color: #0d6efd;
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
+}
+
+/* =========================
+   Clear (×) button
+   ========================= */
+
+.select2-selection__clear {
+    color: #adb5bd;
+    font-size: 1.2rem;
+    margin-right: 6px;
+}
+
+.select2-selection__clear:hover {
+    color: #dc3545;
+}
+
+/* =========================
+   Modal Compatibility
+   ========================= */
+
+.modal .select2-container {
+    z-index: 1056;
+}
+
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.page-loader .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
