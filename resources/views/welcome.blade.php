@@ -1,70 +1,204 @@
 @extends('layouts.frontend')
 @push('frontendstyles')
     <style>
-        /* Teacher Card Hover */
-        .teacherSwiper .card {
-            transition: transform 0.3s, box-shadow 0.3s;
+        /* --- Teacher Section Navigation --- */
+        .teacher-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
         }
 
-        .teacherSwiper .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-        }
-
-        /* Profile Image Hover */
-        .teacherSwiper .card img {
-            transition: transform 0.3s ease;
-        }
-
-        .teacherSwiper .card img:hover {
-            transform: scale(1.1);
-        }
-
-        /* Swiper Navigation - Top Right */
         .teacher-nav-buttons {
-            position: absolute;
-            top: -45px;
-            right: 0;
-            z-index: 10;
+            display: flex;
+            gap: 10px;
+            position: relative;
         }
 
-        .swiper-button-next,
-        .swiper-button-prev {
+        /* Reset Swiper Default Absolute Position */
+        .teacher-nav-buttons .swiper-button-next,
+        .teacher-nav-buttons .swiper-button-prev {
+            position: static;
+            width: 40px;
+            height: 40px;
+            margin: 0;
+            background-color: #fff;
+            color: #6366f1;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .teacher-nav-buttons .swiper-button-next:after,
+        .teacher-nav-buttons .swiper-button-prev:after {
+            font-size: 16px;
+            /* Smaller, cleaner arrows */
+            font-weight: bold;
+        }
+
+        .teacher-nav-buttons .swiper-button-next:hover,
+        .teacher-nav-buttons .swiper-button-prev:hover {
             background-color: #6366f1;
             color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* --- Beautiful Testimonial Style Card --- */
+        .teacher-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid #f0f0f0;
+            height: 100%;
+            margin: 10px 5px;
+            /* Space for box-shadow */
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: transparent;
+        }
+
+        .teacher-avatar-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .teacher-avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .teacher-card .quote-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #6366f1;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 12px;
+            border: 3px solid #fff;
         }
 
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            background-color: #4f46e5;
+        .teacher-card h4 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 5px;
         }
 
-        /* Remove Pagination Dots */
-        .teacherSwiper .swiper-pagination {
-            display: none;
+        .teacher-card .headline {
+            color: #6366f1;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
 
-        /* Badge Styling */
-        .teacherSwiper .badge {
-            font-size: 0.7rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 1rem;
+        .teacher-card .subjects-tags .badge {
+            background: #f3f4f6;
+            color: #4b5563;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .teacher-card .view-profile-btn {
+            margin-top: 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 10px 25px;
+            background: #f3f4f6;
+            color: #1f2937;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .teacher-card:hover .view-profile-btn {
+            background: #6366f1;
+            color: #fff;
+        }
+
+        .search-bar-wrapper {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            padding: 6px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            padding: 14px 16px;
+            font-size: 0.95rem;
+            width: 100%;
+            background: transparent;
+        }
+
+        .search-input.left {
+            border-radius: 999px 0 0 999px;
+        }
+
+        .search-input.right {
+            border-radius: 0 999px 999px 0;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .divider {
+            color: #cbd5e1;
+            font-weight: 500;
+            user-select: none;
+        }
+
+        .search-btn {
+            background: #4f46e5;
+            border: none;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 999px;
+            margin-left: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #4338ca;
         }
     </style>
 @endpush
 @section('content')
     <x-frontend.navbar />
 
-
     @php
         $teacherprofile = TeacherProfile();
+        $teachersubjects = TeacherSubjects();
     @endphp
+
+    
     <header class="hero-section">
 
         <div class="bg-shape bg-shape-1"></div>
@@ -83,8 +217,32 @@
                 Everything you need for smooth workflow and insightful analytics in one place.
             </p>
             <div class="d-flex justify-content-center">
-                <button class="btn btn-hero-primary">Get Started</button>
-                <button class="btn btn-hero-outline">Learn More</button>
+                {{-- <button class="btn btn-hero-primary">Get Started</button>
+                <button class="btn btn-hero-outline">Learn More</button> --}}
+                <form action="{{ route('search.teachers') }}" method="GET" class="search-bar-wrapper">
+                    <div class="search-bar">
+                        <select name="subject" class="search-input left">
+                            <option value="">Select Subject</option>
+
+                            @foreach($teachersubjects as $subject)
+                                <option value="{{ $subject->subject->name }}"
+                                    {{ request('subject') == $subject->id ? 'selected' : '' }}>
+                                    {{ $subject->subject->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <span class="divider">|</span>
+
+                        <input type="text" name="location" class="search-input right" placeholder="Search location"
+                            value="{{ request('location') }}">
+
+                        <button type="submit" class="search-btn">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
             </div>
         </div>
         <div class="decoration dec-dot-big-pink"></div>
@@ -151,19 +309,17 @@
     </section>
 
     {{-- Teacher profile --}}
-    <section class="py-16 bg-gray-50 position-relative">
-        <div class="container mx-auto">
-            <div class="text-center mb-12">
-                <span class="text-indigo-600 uppercase tracking-widest font-semibold">Our Teachers</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2">Meet Our Expert Teachers</h2>
-                <p class="text-gray-500 mt-2 max-w-2xl mx-auto">
-                    Explore our experienced teachers with multiple subjects and years of teaching experience.
-                </p>
-            </div>
+    <section class="py-5 bg-light position-relative">
+        <div class="container">
 
-            {{-- Arrow Navigation Container --}}
-            <div class="d-flex justify-content-end mb-4">
-                <div class="teacher-nav-buttons">
+            {{-- Header with Integrated Arrows --}}
+            <div class="teacher-section-header">
+                <div class="header-text">
+                    <span class="text-indigo-600 fw-bold text-uppercase tracking-widest small">Our Teachers</span>
+                    <h2 class="display-6 fw-bold mt-1">Meet Our Expert Teachers</h2>
+                </div>
+
+                <div class="teacher-nav-buttons d-none d-md-flex">
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
                 </div>
@@ -173,46 +329,48 @@
                 <div class="swiper-wrapper">
                     @foreach ($teacherprofile as $teacher)
                         <div class="swiper-slide">
-                            <div class="card text-center border-0 shadow-lg rounded-lg p-4 position-relative">
+                            <div class="teacher-card text-center">
                                 {{-- Profile Picture --}}
-                                <div class="mx-auto rounded-circle overflow-hidden border border-primary mb-3"
-                                    style="width: 100px; height: 100px;">
-                                    <img src="https://randomuser.me/api/portraits/{{ rand(0, 1) == 0 ? 'men' : 'women' }}/{{ rand(1, 99) }}.jpg"
-                                        alt="{{ $teacher->full_name }}" class="w-100 h-100 object-fit-cover">
+                                <div class="teacher-avatar-wrapper">
+                                    
+                                    {{-- <img src="https://randomuser.me/api/portraits/{{ rand(0, 1) == 0 ? 'men' : 'women' }}/{{ rand(1, 99) }}.jpg"
+                                        alt="{{ $teacher->full_name }}"> --}}
+                                    <img src="{{ $teacher->profile_picture }}" alt="{{ $teacher->full_name }}"
+                                    onerror="this.onerror=null;this.src='https://randomuser.me/api/portraits/{{ rand(0, 1) == 0 ? 'men' : 'women' }}/{{ rand(1, 99) }}.jpg';">
+                                    <div class="quote-icon">
+                                        <i class="bi bi-patch-check-fill"></i>
+                                    </div>
                                 </div>
 
-                                {{-- Name & Headline --}}
-                                <h4 class="fw-bold text-dark">{{ $teacher->full_name }}</h4>
-                                <p class="text-muted mb-2">{{ $teacher->headline }}</p>
+                                {{-- Info --}}
+                                <h4>{{ $teacher->full_name }}</h4>
+                                <p class="headline">{{ $teacher->headline }}</p>
 
                                 {{-- Subjects --}}
-                                <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                                <div class="subjects-tags d-flex flex-wrap justify-content-center gap-2 mb-3">
                                     @foreach ($teacher->subjects as $sub)
-                                        <span
-                                            class="badge bg-indigo-100 text-indigo-700">{{ $sub->subject->name ?? '' }}</span>
+                                        <span class="badge">{{ $sub->subject->name ?? '' }}</span>
                                     @endforeach
                                 </div>
 
-                                {{-- Education Tooltip --}}
+                                {{-- Education --}}
                                 @if ($teacher->educations->count())
-                                    <div class="text-muted small mb-3">
-                                        <span class="text-decoration-underline"
-                                            title="@foreach ($teacher->educations as $edu) {{ $edu->education?->degree ?? '' }} ({{ $edu->institution }})@if (!$loop->last), @endif @endforeach">
-                                            View Education
-                                        </span>
-                                    </div>
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-mortarboard-fill me-1"></i>
+                                        {{ $teacher->educations->first()->education?->degree ?? 'Expert' }}
+                                    </p>
                                 @endif
 
-                                {{-- View Profile Button --}}
-                                <a href="#" class="btn btn-primary btn-sm px-4 py-2 mt-2">View Profile</a>
+                                <a href="#" class="btn view-profile-btn">View Profile</a>
                             </div>
                         </div>
                     @endforeach
                 </div>
+                {{-- Mobile Pagination --}}
+                <div class="swiper-pagination d-md-none mt-4"></div>
             </div>
         </div>
     </section>
-
 
 
 
@@ -406,16 +564,21 @@
     <script>
         var teacherSwiper = new Swiper(".teacherSwiper", {
             slidesPerView: 1,
-            spaceBetween: 20,
+            spaceBetween: 30, // Increased spacing for a cleaner look
             loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
             navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
+                nextEl: ".teacher-nav-buttons .swiper-button-next",
+                prevEl: ".teacher-nav-buttons .swiper-button-prev",
+            },
+            pagination: {
+                el: ".teacherSwiper .swiper-pagination",
+                clickable: true,
             },
             breakpoints: {
-                576: {
-                    slidesPerView: 1
-                },
                 768: {
                     slidesPerView: 2
                 },
@@ -423,7 +586,7 @@
                     slidesPerView: 3
                 },
                 1200: {
-                    slidesPerView: 4
+                    slidesPerView: 3
                 },
             },
         });

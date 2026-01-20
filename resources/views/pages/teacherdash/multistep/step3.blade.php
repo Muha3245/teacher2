@@ -7,7 +7,13 @@
     <div class="row g-3 mb-3">
         <div class="col-md-4">
             <label class="form-label">Subject ID</label>
-            <input type="text" id="subject_id_input" name="subject_id" class="form-control">
+            <select class="form-select selectsubject" id="subject_id_input" name="subject_id">
+                <option value="">Select Subject</option>
+                @foreach ($subjects as $sub)
+                    <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                @endforeach
+            </select>
+            {{-- <input type="text" id="subject_id_input" name="subject_id" class="form-control"> --}}
         </div>
         <div class="col-md-4">
             <label class="form-label">From Level</label>
@@ -17,140 +23,188 @@
             <label class="form-label">To Level</label>
             <input type="text" id="to_level_input" name="to_level" class="form-control">
         </div>
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
     </div>
     <button type="button" class="btn btn-sm btn-outline-primary fw-bold mb-3" id="add-subject">+ Add Subject</button>
 
     <!-- Display added subjects -->
-    <div id="subjects-list"></div>
+    <div id="subjects-list">
+        @if (!empty($singleprofile) && $singleprofile->subjects->count())
+            @foreach ($singleprofile->subjects as $i => $s)
+                <div class="subject-box bg-warning bg-opacity-25 rounded-3 p-2 mb-2 d-flex justify-content-between align-items-center"
+                    data-id="{{ $s->id }}" data-subject-id="{{ $s->subject_id }}">
+
+                    <span>{{ $s->subject->name ?? 'Unknown Subject' }} | {{ $s->from_level }} →
+                        {{ $s->to_level }}</span>
+                    <div>
+                        <i class="bi bi-pencil-square text-dark me-2 edit-subject" style="cursor:pointer"></i>
+                        <i class="bi bi-x-circle text-danger delete-subject" style="cursor:pointer"></i>
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <div class="text-muted">No subjects added yet.</div>
+        @endif
+    </div>
+
 </form>
 
 @push('multistepteacherdashscripts')
     <script>
-        let subjects = JSON.parse(localStorage.getItem('step_2') || '{"subjects": []}').subjects;
+        let editIndex = null; // store editing subject-box index
 
-        // Initialize jQuery Validate
-        if (subjects.length === 0) {
-            $('#step3Form').validate({
-                rules: {
-                    subject_id: {
-                        required: true,
-                        minlength: 3
-                    },
-                    from_level: {
-                        required: true,
-                        number: true,
-                        min: 1
-                    },
-                    to_level: {
-                        required: true,
-                        number: true,
-                        min: function() {
-                            return parseInt($('#from_level_input').val()) || 1;
-                        }
-                    }
-                },
-                messages: {
-                    subject_id: {
-                        required: "Subject is required",
-                        minlength: "Must be at least 3 characters"
-                    },
-                    from_level: {
-                        required: "From Level is required",
-                        number: "Enter a valid number",
-                        min: "Minimum is 1"
-                    },
-                    to_level: {
-                        required: "To Level is required",
-                        number: "Enter a valid number",
-                        min: "Must be >= From Level"
-                    }
-                },
-                errorElement: 'small',
-                errorClass: 'text-danger',
-                highlight: function(el) {
-                    $(el).addClass('is-invalid');
-                },
-                unhighlight: function(el) {
-                    $(el).removeClass('is-invalid');
-                }
-            });
-        }
+        $('#subject_id_input').select2({
+            tags: true,
+            placeholder: 'Select or add subject',
+            width: '100%',
+            tokenSeparators: [','],
+        });
 
+        // Add or Update Subject
+        $('#add-subject').on('click', function(e) {
+            e.preventDefault();
 
-        // Render subjects
-        function renderSubjects() {
-            $('#subjects-list').empty();
-            subjects.forEach((s, i) => {
-                $('#subjects-list').append(`
-            <div class="subject-box bg-warning bg-opacity-25 rounded-3 p-2 mb-2 d-flex justify-content-between align-items-center">
-                <span>${s.subject_id} | ${s.from_level} → ${s.to_level}</span>
-                <div>
-                    <i class="bi bi-pencil-square text-dark me-2 edit-subject" data-index="${i}" style="cursor:pointer"></i>
-                    <i class="bi bi-x-circle text-danger delete-subject" data-index="${i}" style="cursor:pointer"></i>
-                </div>
-            </div>
-        `);
-            });
-            localStorage.setItem('step_2', JSON.stringify({
-                subjects
-            }));
-        }
+            let user_id = $('input[name="user_id"]').val();
+            let subject_id = $('#subject_id_input').val();
+            let from_level = $('#from_level_input').val();
+            let to_level = $('#to_level_input').val();
 
-        // Add or update subject
-        $('#add-subject').click(function() {
-            // Validate inputs first
-            if (!$('#step3Form').valid()) return;
-
-            const subject_id = $('#subject_id_input').val().trim();
-            const from_level = $('#from_level_input').val().trim();
-            const to_level = $('#to_level_input').val().trim();
-
-            const editIndex = $(this).data('editIndex');
-            if (editIndex !== undefined) {
-                subjects[editIndex] = {
-                    subject_id,
-                    from_level,
-                    to_level
-                };
-                $(this).removeData('editIndex').text('+ Add Subject');
-            } else {
-                subjects.push({
-                    subject_id,
-                    from_level,
-                    to_level
-                });
+            if (!subject_id || !from_level || !to_level) {
+                toastr.error('Please fill all fields to add a subject');
+                return;
             }
 
-            // Reset inputs
-            $('#subject_id_input').val('');
-            $('#from_level_input').val('');
-            $('#to_level_input').val('');
-            
+            let url = '/api/stepthree';
+            let data = {
+                user_id: user_id,
+                subject_id: subject_id,
+                from_level: from_level,
+                to_level: to_level
+            };
 
-            renderSubjects();
+            // If we are editing, pass edit flag and existing subject-profile-id
+            if (editIndex !== null) {
+                const box = $('#subjects-list .subject-box').eq(editIndex);
+                data.edit = true;
+                data.subject_profile_id = box.data('id'); // store subject_profile_id in box data-id
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(res) {
+                    if (res.status) {
+                        toastr.success(res.message);
+
+                        // Remove placeholder if exists
+                        $('#subjects-list .text-muted').remove();
+
+                        if (editIndex !== null) {
+                            // Update existing box
+                            const box = $('#subjects-list .subject-box').eq(editIndex);
+                            box.html(`
+                        <span>${res.subject_name} | ${res.from_level} → ${res.to_level}</span>
+                        <div>
+                            <i class="bi bi-pencil-square text-dark me-2 edit-subject" style="cursor:pointer"></i>
+                            <i class="bi bi-x-circle text-danger delete-subject"  style="cursor:pointer"></i>
+                        </div>
+                    `);
+                            box.data('id', res.subject_profile_id);
+
+                            // Reset button & index
+                            $('#add-subject').text('+ Add Subject');
+                            editIndex = null;
+                        } else {
+                            // Add new box
+                            const i = $('#subjects-list .subject-box').length;
+                            const newHtml = $(`
+                        <div class="subject-box bg-warning bg-opacity-25 rounded-3 p-2 mb-2 d-flex justify-content-between align-items-center" data-id="${res.subject_profile_id}" data-subject-id="${res.subject_id}">
+                            <span>${res.subject_name} | ${res.from_level} → ${res.to_level}</span>
+                            <div>
+                                <i class="bi bi-pencil-square text-dark me-2 edit-subject" style="cursor:pointer"></i>
+                                <i class="bi bi-x-circle text-danger delete-subject" style="cursor:pointer"></i>
+                            </div>
+                        </div>
+                    `);
+                            $('#subjects-list').append(newHtml);
+                        }
+
+                        // Clear inputs
+                        $('#subject_id_input').val(null).trigger('change');
+                        $('#from_level_input').val('');
+                        $('#to_level_input').val('');
+                    }
+                },
+                error: function(err) {
+                    toastr.error('Something went wrong!');
+                }
+            });
         });
 
-        // Edit subject
+        // Edit Subject
         $(document).on('click', '.edit-subject', function() {
-            const i = $(this).data('index');
-            const s = subjects[i];
-            $('#subject_id_input').val(s.subject_id);
-            $('#from_level_input').val(s.from_level);
-            $('#to_level_input').val(s.to_level);
-            $('#add-subject').data('editIndex', i).text('Update Subject');
+            const box = $(this).closest('.subject-box');
+            editIndex = box.index(); // store index for update
+
+            const text = box.find('span').text(); // format: "subject_name | from → to"
+            const parts = text.split('|');
+            const subjectName = parts[0].trim();
+            const levels = parts[1].split('→');
+            const from = levels[0].trim();
+            const to = levels[1].trim();
+
+            // If exists in select2, select it; if new, add tag
+            if ($('#subject_id_input option').filter(function() {
+                    return $(this).text() == subjectName;
+                }).length === 0) {
+                const newOption = new Option(subjectName, subjectName, true, true);
+                $('#subject_id_input').append(newOption).trigger('change');
+            } else {
+                $('#subject_id_input').val($('#subject_id_input option').filter(function() {
+                    return $(this).text() == subjectName;
+                }).val()).trigger('change');
+            }
+
+            $('#from_level_input').val(from);
+            $('#to_level_input').val(to);
+
+            $('#add-subject').text('Update Subject');
         });
 
-        // Delete subject
+        // Delete Subject
         $(document).on('click', '.delete-subject', function() {
-            const i = $(this).data('index');
-            subjects.splice(i, 1);
-            renderSubjects();
+            const box = $(this).closest('.subject-box');
+            const subjectProfileId = box.data('id');
+
+            if (!subjectProfileId) {
+                toastr.warning('This subject is not saved yet.');
+                return;
+            }
+
+            if (confirm('Are you sure you want to delete this subject?')) {
+                $.ajax({
+                    url: '/api/stepthree/delete', // create API route for deleting
+                    type: 'POST',
+                    data: {
+                        subject_profile_id: subjectProfileId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(res) {
+                        if (res.status) {
+                            toastr.success(res.message);
+                            box.remove();
+                            if ($('#subjects-list .subject-box').length === 0) {
+                                $('#subjects-list').html(
+                                    '<div class="text-muted">No subjects added yet.</div>');
+                            }
+                        }
+                    },
+                    error: function(err) {
+                        toastr.error('Could not delete subject');
+                    }
+                });
+            }
         });
-
-        // Next button click
-        console.log(subjects.length)
-
-
-        renderSubjects();
     </script>
 @endpush

@@ -70,7 +70,7 @@
 
 
                                     <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                                        {{ $profile->location->city ?? 'N/A' }}</p>
+                                        {{ $profile->location ?? 'N/A' }}</p>
                                     <p class="mb-0"><i class="fas fa-calendar-alt me-2 text-primary"></i> Joined
                                         {{ $profile->created_at->format('M Y') }}</p>
                                 </div>
@@ -182,8 +182,9 @@
                                                         </p>
                                                         <p class="mb-0 small text-dark">{{ $education->institution }}
                                                         </p>
-                                                        <small class="text-muted">Completed:
-                                                            {{ $education->year_completed }}</small>
+                                                        <small class="text-muted">start Year:
+                                                            {{ $education->start_year }} - end Year:
+                                                            {{ $education->end_year}}</small>
                                                     </div>
                                                     <button class="btn btn-sm edit-btn" data-bs-toggle="modal"
                                                         data-bs-target="#editEduModal{{ $education->id }}">

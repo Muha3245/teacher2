@@ -15,7 +15,8 @@ class TeacherEducation extends Model
         'education_id',
         'field',
         'institution',
-        'year_completed',
+        'start_year',
+        'end_year',
     ];
 
     public function teacherProfile()

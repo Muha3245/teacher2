@@ -1,13 +1,14 @@
 <?php
 
+use Illuminate\Http\Request;
+use App\Models\TeacherProfile;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\TeacherController;
-use App\Models\TeacherProfile;
 use App\Http\Controllers\Front\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\TeacherController;
 
+use App\Http\Controllers\Front\TeacherSearchController;
 use App\Http\Controllers\Front\TeacherDashboardController;
 
 
@@ -77,6 +78,9 @@ Route::middleware(['auth'])->prefix('teacher/profile')->group(function () {
 Route::get('/createprofile', function () {
     return view('pages.teacherdash.create-profile');
 })->name('createprofile');
+
+Route::get('/search-teachers', [TeacherSearchController::class, 'index'])
+    ->name('search.teachers');
 
 
 Route::post('/profile/create/step/{step}',function(request $request){

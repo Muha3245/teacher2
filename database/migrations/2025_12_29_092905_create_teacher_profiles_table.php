@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
 
             $table->text('address')->nullable();
-            $table->foreignId('location_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('location')->nullable();
 
             // Teaching info
             $table->enum('charge_period', ['hourly', 'daily', 'weekly', 'monthly'])->nullable();

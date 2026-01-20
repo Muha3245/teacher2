@@ -125,9 +125,9 @@
                                                                 class="form-label small fw-bold text-uppercase">Gender</label>
                                                             <select name="gender" class="form-select bg-white">
                                                                 <option value="">Select</option>
-                                                                <option value="Male" @if (old('gender', $teacher->gender) == 'Male') selected @endif>Male</option>
-                                                                <option value="Female" @if (old('gender', $teacher->gender) == 'Female') selected @endif>Female</option>
-                                                                <option value="Other" @if (old('gender', $teacher->gender) == 'Other') selected @endif>Other</option>
+                                                                <option value="male" @if (old('gender', $teacher->gender) == 'male') selected @endif>Male</option>
+                                                                <option value="female" @if (old('gender', $teacher->gender) == 'female') selected @endif>Female</option>
+                                                                <option value="other" @if (old('gender', $teacher->gender) == 'other') selected @endif>Other</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-4">
@@ -182,7 +182,7 @@
                                                                     class="form-select select2-init">
                                                                     <option value="">--Select--</option>
                                                                     @foreach ($subjects as $subject)
-                                                                        <option value="{{ $subject->id }}" @if ($subject->id == $sub->id) selected @endif>
+                                                                        <option value="{{ $subject->id }}" @if ($subject->id == $sub->subject_id) selected @endif>
                                                                             {{ $subject->name }}</option>
                                                                     @endforeach
                                                                 </select>
@@ -298,7 +298,7 @@
                                                                     class="form-select select2-init">
                                                                     <option value="">--Select--</option>
                                                                     @foreach ($educations as $e)
-                                                                        <option value="{{ $e->id }}" @if ($edu->id == $e->id) selected @endif>
+                                                                        <option value="{{ $e->id }}" @if ($edu->education_id == $e->id) selected @endif>
                                                                             {{ $e->degree }}</option>
                                                                     @endforeach
                                                                 </select>

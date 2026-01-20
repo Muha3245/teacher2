@@ -121,7 +121,7 @@
                                                                     <div class="col">
                                                                         <div class="card h-100 border-info-subtle bg-light-subtle shadow-sm">
                                                                             <div class="card-body py-2 px-3">
-                                                                                <div class="fw-bold text-info">{{ $subject->name }}</div>
+                                                                                <div class="fw-bold text-info">{{ $subject->subject->name }}</div>
                                                                                 <div class="small">
                                                                                     <span class="text-muted small">Level:</span> 
                                                                                     <span class="badge bg-info text-dark">{{ $subject->from_level }}</span> 
@@ -143,15 +143,15 @@
                                                                 <i class="fa-solid fa-graduation-cap me-2"></i> Education & Certification
                                                             </h6>
                                                             <div class="row g-3">
-                                                                @forelse($teacher->educations as $education)
+                                                                @forelse($teacher->educations as $edu)
                                                                     <div class="col-md-6">
                                                                         <div class="card h-100 border-success-subtle shadow-sm border-start border-4 border-success">
                                                                             <div class="card-body p-2">
-                                                                                <div class="fw-bold">{{ $education->degree }}</div>
-                                                                                <div class="small text-muted">{{ $education->field }}</div>
+                                                                                <div class="fw-bold">{{ $edu->degree }}</div>
+                                                                                <div class="small text-muted">{{ $edu->field }}</div>
                                                                                 <div class="d-flex justify-content-between mt-1 border-top pt-1">
-                                                                                    <span class="small fw-semibold text-truncate" style="max-width: 150px;">{{ $education->institution }}</span>
-                                                                                    <span class="badge bg-secondary">{{ $education->year_completed }}</span>
+                                                                                    <span class="small fw-semibold text-truncate" style="max-width: 150px;">{{ $edu->institution }}</span>
+                                                                                    <span class="badge bg-secondary">{{ $edu->year_completed }}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

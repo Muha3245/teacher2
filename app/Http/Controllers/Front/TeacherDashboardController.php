@@ -19,14 +19,14 @@ class TeacherDashboardController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-        return view('pages.teacherdash.dashboard')
-        ->renderSections()['content'];
+            return view('pages.teacherdash.dashboard')
+                ->renderSections()['content'];
         }
         return view('pages.teacherdash.dashboard');
     }
     public function ProfileDetails(Request $request)
     {
-        $profile = TeacherProfile::with('user','subjects','location','educations','phones')->where('user_id', auth()->id())->firstOrFail();
+        $profile = TeacherProfile::with('user', 'subjects', 'location', 'educations', 'phones')->where('user_id', auth()->id())->firstOrFail();
         $locations = Location::all();
         $subjects = Subject::all();
         $educations = Education::all();
@@ -35,12 +35,12 @@ class TeacherDashboardController extends Controller
 
         if ($request->ajax()) {
             // Return ONLY the inner content, no layout
-            return view('pages.teacherdash.ProfileDetails', compact('profile','locations','subjects','educations',))
-            ->renderSections()['content'];
+            return view('pages.teacherdash.ProfileDetails', compact('profile', 'locations', 'subjects', 'educations',))
+                ->renderSections()['content'];
         }
-        return view('pages.teacherdash.ProfileDetails',compact('profile','locations','subjects','educations',));
+        return view('pages.teacherdash.ProfileDetails', compact('profile', 'locations', 'subjects', 'educations',));
     }
-    
+
 
     protected function profile()
     {
@@ -58,7 +58,10 @@ class TeacherDashboardController extends Controller
         ]);
 
         $this->profile()->update($request->only([
-            'full_name','headline','gender','years_teaching'
+            'full_name',
+            'headline',
+            'gender',
+            'years_teaching'
         ]));
 
         return response()->json([
@@ -94,7 +97,7 @@ class TeacherDashboardController extends Controller
             $file->move(public_path('profile_pictures'), $name);
 
             $this->profile()->update([
-                'profile_picture' => 'profile_pictures/'.$name
+                'profile_picture' => 'profile_pictures/' . $name
             ]);
         }
 
@@ -142,46 +145,75 @@ class TeacherDashboardController extends Controller
 
     public function updateEducations(Request $request)
     {
+        Log::info('updateEducations', $request->all());
+
         $profile = $this->profile();
 
-        if ($request->has('educations')) {
-            foreach ($request->educations as $key => $eduData) {
+        if (!$request->has('educations')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No education data received'
+            ], 422);
+        }
 
-                if (is_numeric($key)) {
-                    $education = TeacherEducation::where('id', $key)
-                        ->where('teacher_profile_id', $profile->id)
-                        ->first();
-                    
-                    if ($education) {
-                        $education->update([
-                            'institution' => $eduData['institution'],
-                            'year_completed' => $eduData['year_completed'],
-                            'field' => $eduData['field'] ?? null,
-                            // Assuming degree is sent as education_id
-                            'education_id' => $eduData['degree_name']
-                        ]);
-                    }
-                }
-    
-                if ($key === 'new' && !empty($eduData['degree'])) {
-                    $edu = Education::firstOrCreate(['degree' => $eduData['degree']]);
-    
-                    TeacherEducation::create([
-                        'teacher_profile_id' => $profile->id,
-                        'education_id' => $edu->id,
-                        'institution' => $eduData['institution'],
-                        'year_completed' => $eduData['year_completed'],
-                        'field' => $eduData['field'] ?? null,
+        foreach ($request->educations as $key => $eduData) {
+
+            /**
+             * ======================
+             * UPDATE EXISTING
+             * ======================
+             */
+            if (is_numeric($key)) {
+
+                $education = TeacherEducation::where('id', $key)
+                    ->where('teacher_profile_id', $profile->id)
+                    ->first();
+
+                if ($education) {
+                    $education->update([
+                        'education_id' => $eduData['degree_name'], // ID
+                        'institution'  => $eduData['institution'],
+                        'field'        => $eduData['field'] ?? null,
+                        'start_year'   => $eduData['start_year'],
+                        'end_year'     => $eduData['end_year'],
                     ]);
                 }
+            }
+
+            /**
+             * ======================
+             * ADD NEW
+             * ======================
+             */
+            if ($key === 'new' && !empty($eduData['degree_name'])) {
+
+                // If select2 tag → string, else → ID
+                if (is_numeric($eduData['degree_name'])) {
+                    $educationId = $eduData['degree_name'];
+                } else {
+                    $education = Education::firstOrCreate([
+                        'degree' => $eduData['degree_name']
+                    ]);
+                    $educationId = $education->id;
+                }
+
+                TeacherEducation::create([
+                    'teacher_profile_id' => $profile->id,
+                    'education_id'       => $educationId,
+                    'institution'        => $eduData['institution'],
+                    'field'              => $eduData['field'] ?? null,
+                    'start_year'         => $eduData['start_year'],
+                    'end_year'           => $eduData['end_year'],
+                ]);
             }
         }
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Education updated'
+            'status' => true,
+            'message' => 'Education saved successfully'
         ]);
     }
+
     public function updatePhone(Request $request)
     {
         $profile = $this->profile();
@@ -203,16 +235,15 @@ class TeacherDashboardController extends Controller
             }
         }
         // Update charge period and prices
-    $profile->update([
-        'charge_period' => $request->charge_period,
-        'min_price' => $request->min_price,
-        'max_price' => $request->max_price,
-    ]);
+        $profile->update([
+            'charge_period' => $request->charge_period,
+            'min_price' => $request->min_price,
+            'max_price' => $request->max_price,
+        ]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Phone numbers updated successfully',
         ]);
     }
-
 }

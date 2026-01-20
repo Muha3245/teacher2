@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('education_id')->constrained()->cascadeOnDelete();
             $table->string('field')->nullable();
             $table->string('institution')->nullable();
-            $table->year('year_completed')->nullable();
+            $table->year('start_year')->nullable();
+            $table->year('end_year')->nullable();
             $table->timestamps();
         });
     }

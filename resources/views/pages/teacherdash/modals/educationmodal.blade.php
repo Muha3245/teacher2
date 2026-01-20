@@ -41,15 +41,31 @@
                             <input type="text" name="educations[{{ $education->id }}][institution]"
                                 class="form-control" value="{{ $education->institution }}">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">
+                                Field <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="educations[{{ $education->id }}][field]"
+                                class="form-control" value="{{ $education->field }}">
+                        </div>
+                        
 
                         {{-- Year --}}
                         <div class="mb-3">
                             <label class="form-label small fw-semibold">
-                                Year Completed <span class="text-danger">*</span>
+                                start Year <span class="text-danger">*</span>
                             </label>
-                            <input type="text" name="educations[{{ $education->id }}][year_completed]"
-                                class="form-control" value="{{ $education->year_completed }}" placeholder="e.g. 2023">
+                            <input type="text" name="educations[{{ $education->id }}][start_year]"
+                                class="form-control" value="{{ $education->start_year}}" placeholder="e.g. 2023">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">
+                                End Year <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="educations[{{ $education->id }}][end_year]"
+                                class="form-control" value="{{ $education->end_year}}" placeholder="e.g. 2027">
+                        </div>
+
 
                     </div>
 
@@ -111,14 +127,27 @@
                         </label>
                         <input type="text" name="educations[new][institution]" class="form-control">
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">
+                            Field <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" name="educations[new][field]" class="form-control">
+                    </div>
 
                     {{-- Year --}}
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">
-                            Year Completed <span class="text-danger">*</span>
+                            Start Year<span class="text-danger">*</span>
                         </label>
-                        <input type="text" name="educations[new][year_completed]" class="form-control"
+                        <input type="text" name="educations[new][start_year]" class="form-control"
                             placeholder="e.g. 2024">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">
+                            End Year<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" name="educations[new][end_year]" class="form-control"
+                            placeholder="e.g. 2027">
                     </div>
 
                 </div>

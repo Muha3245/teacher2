@@ -1,3 +1,9 @@
+@php
+    $subjects = Subjects();
+    $educations = Educations();
+    $singleprofile = SingelTeacherProfile(auth()->id());
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,11 +12,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor Onboarding | Create Profile</title>
 
+    {{-- CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.10.1/build/css/intlTelInput.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/frontend/teacherdash.css') }}">
-
 
     <style>
         :root {
@@ -183,170 +191,138 @@
 
     <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-lg-10 col-xl-9">
+            <div class="col-lg-10">
                 <div class="card shadow-lg p-4 p-md-5">
 
+                    {{-- Header --}}
                     <div class="text-center mb-5">
                         <h2 class="fw-bold">Complete Your Teacher Profile</h2>
-                        <p class="text-muted">Fill in your details to start reaching students globally.</p>
+                        <p class="text-muted">Step-by-step onboarding</p>
                     </div>
 
-                    <div class="stepper">
-                        <div class="stepper-item active" id="s-0">
-                            <div class="step-counter">1</div>
-                            <div class="small fw-bold text-uppercase">Identity</div>
-                        </div>
-                        <div class="stepper-item" id="s-1">
-                            <div class="step-counter">2</div>
-                            <div class="small fw-bold text-uppercase">Rates</div>
-                        </div>
-                        <div class="stepper-item" id="s-2">
-                            <div class="step-counter">3</div>
-                            <div class="small fw-bold text-uppercase">subjects</div>
-                        </div>
-                        <div class="stepper-item" id="s-3">
-                            <div class="step-counter">4</div>
-                            <div class="small fw-bold text-uppercase">Education</div>
-                        </div>
-                        <div class="stepper-item" id="s-4">
-                            <div class="step-counter">5</div>
-                            <div class="small fw-bold text-uppercase">Biography</div>
-                        </div>
+                    {{-- Stepper --}}
+                    <div class="stepper mb-5">
+                        @foreach ([1, 2, 3, 4, 5, 6] as $i)
+                            <div class="stepper-item {{ $i == 1 ? 'active' : '' }}">
+                                <div class="step-counter">{{ $i }}</div>
+                            </div>
+                        @endforeach
                     </div>
 
+                    {{-- Steps --}}
+                    <div class="step active">@include('pages.teacherdash.multistep.step1')</div>
+                    <div class="step">@include('pages.teacherdash.multistep.step2')</div>
+                    <div class="step">@include('pages.teacherdash.multistep.step3')</div>
+                    <div class="step">@include('pages.teacherdash.multistep.step4')</div>
+                    <div class="step">@include('pages.teacherdash.multistep.step5')</div>
+                    <div class="step">@include('pages.teacherdash.multistep.step6')</div>
 
-
-                    <div class="step active">
-                        @include('pages.teacherdash.multistep.step1')
+                    {{-- SUCCESS STEP --}}
+                    <div class="step text-center" id="successStep">
+                        <i class="bi bi-check-circle text-success display-3"></i>
+                        <h3 class="fw-bold mt-3">Profile Completed 🎉</h3>
+                        <p class="text-muted">Your profile is now live.</p>
+                        <a href="{{ route('teacher.dashboard') }}" class="btn btn-success btn-lg">
+                            Go to Dashboard
+                        </a>
                     </div>
 
-                    <div class="step">
-                        <h5 class="fw-bold mb-4">Teaching Preferences & Rates</h5>
-                        @include('pages.teacherdash.multistep.step2')
-                    </div>
+                    <input type="hidden" id="userid" value="{{ auth()->id() }}">
 
-                    <div class="step">
-                        @include('pages.teacherdash.multistep.step3')
-                    </div>
-                    <div class="step">
-                        @include('pages.teacherdash.multistep.step4')
-                    </div>
+                    {{-- Navigation --}}
+                    <div class="d-flex justify-content-between mt-5 border-top pt-4">
+                        <button class="btn btn-secondary" id="prevBtn">Back</button>
 
-
-                    <div class="step">
-                        <h5 class="fw-bold mb-4">Finalizing Your Profile</h5>
-                        @include('pages.teacherdash.multistep.step5')
-                    </div>
-                    <input type="hidden" id="userid" value='{{auth()->id()}}'>
-
-                    <div class="d-flex justify-content-between mt-5 pt-4 border-top">
-                        <button type="button" class="btn btn-secondary px-4 fw-bold" id="prevBtn">Back</button>
                         <div>
-                            <button type="button" class="btn btn-primary px-5 fw-bold" id="nextBtn">Next Step
-                                <i class="bi bi-chevron-right ms-2"></i></button>
-                            <button type="submit" class="btn btn-success px-5 fw-bold d-none" id="submitBtn">Finalize
-                                Profile <i class="bi bi-check-circle ms-2"></i></button>
+                            <button class="btn btn-primary" id="nextBtn">
+                                Next <i class="bi bi-arrow-right"></i>
+                            </button>
+
+                            <button class="btn btn-success d-none" id="submitBtn">
+                                Finalize <i class="bi bi-check"></i>
+                            </button>
                         </div>
                     </div>
-
 
                 </div>
             </div>
         </div>
     </div>
 
+    {{-- JS --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
     @stack('multistepteacherdashscripts')
+
     <script>
-        var userid = $('#userid').val();
-        // let subjects = [];
-        // let educations = [];
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            timeOut: 3000
+        };
+
         let currentStep = 0;
         const steps = $('.step');
         const stepperItems = $('.stepper-item');
 
-        // Multi-step Navigation Logic
         function showStep(index) {
             steps.removeClass('active').eq(index).addClass('active');
+
             stepperItems.each((i, el) => {
                 $(el).toggleClass('active', i === index);
                 $(el).toggleClass('completed', i < index);
             });
 
-            $('#prevBtn').css('visibility', index === 0 ? 'hidden' : 'visible');
+            $('#prevBtn').toggle(index > 0);
 
-            if (index === steps.length - 1) {
+            if (index === steps.length - 2) {
                 $('#nextBtn').addClass('d-none');
                 $('#submitBtn').removeClass('d-none');
             } else {
                 $('#nextBtn').removeClass('d-none');
                 $('#submitBtn').addClass('d-none');
             }
-            window.scrollTo(0, 0);
         }
 
-        $('#nextBtn').click(() => {
-            if (currentStep === 0) {
-                if (!$('#step1Form').valid()) {
-                    return; // STOP here
-                }
-            }
-            if (currentStep === 1) {
-                if (!$('#step2Form').valid()) {
-                    return; // STOP here
-                }
-            }
-            if (currentStep === 2) {
-                if (typeof subjects === 'undefined' || subjects.length < 1) {
-                    alert('Please add at least one subject to the list before proceeding.');
-                    return; // STOP here
-                }
+        $('#nextBtn').on('click', function(e) {
+            e.preventDefault();
 
-                $('#step3Form').validate().resetForm();
-                $('#step3Form .form-control').removeClass('is-invalid');
+            switch (currentStep) {
+                case 0:
+                    step1ajax(e);
+                    break;
+                case 1:
+                    step2ajax(e);
+                    break;
+                default:
+                    currentStep++;
+                    showStep(currentStep);
             }
-            if (currentStep === 3) {
-                if (typeof educations === 'undefined' || educations.length < 1) {
-                    alert('Please add at least one education to the list before proceeding.');
-                    return; // STOP here
-                }
-                $('#step4Form').validate().resetForm();
-                $('#step4Form .form-control').removeClass('is-invalid');
-            }
-            if (currentStep === 4) {
-                if (!$('#step5Form').valid()) {
-                    return; // STOP here
-                }
-            }
-
-
-
-            currentStep++;
-            showStep(currentStep);
-        });
-        $('#prevBtn').click(() => {
-            currentStep--;
-            showStep(currentStep);
         });
 
-        $('.select-2').select2({
-            width: '100%',
-            tags: true,
-            placeholder: 'Search or type',
-            allowClear: true,
-            tokenSeparators: [',']
+        $('#prevBtn').on('click', function() {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
         });
 
+        $('#submitBtn').on('click', function(e) {
+            e.preventDefault();
+            step6Form(e);
+            finishOnboarding();
+        });
 
-        // Initialize
+        /* CALLED AFTER STEP 6 SUCCESS */
+        function finishOnboarding() {
+            $('.stepper, #prevBtn, #nextBtn, #submitBtn').hide();
+            steps.removeClass('active');
+            $('#successStep').addClass('active');
+        }
+
         showStep(currentStep);
-
-
-
-        
     </script>
 
 </body>

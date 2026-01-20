@@ -30,7 +30,7 @@ class TeacherProfileFactory extends Factory
             'gender'            => $this->faker->randomElement(['male', 'female']),
             'birth_date'        => $this->faker->date('Y-m-d', '-25 years'),
             'address'           => $this->faker->address(),
-            'location_id'       => Location::inRandomOrder()->first()?->id,
+            'location'          => $this->faker->city . ', ' . $this->faker->state,
             'charge_period'     => $this->faker->randomElement(['hourly', 'monthly', 'weekly','daily']),
             'min_price'         => $this->faker->numberBetween(500, 2000),
             'max_price'         => $this->faker->numberBetween(2500, 6000),
@@ -40,7 +40,7 @@ class TeacherProfileFactory extends Factory
             'travel_km'         => $this->faker->numberBetween(0, 30),
             'has_digital_pen'   => $this->faker->boolean(),
             'helps_homework'    => $this->faker->boolean(),
-            'opportunity'       => $this->faker->sentence(8),
+            'opportunity' => $this->faker->randomElement(['full_time', 'part_time', 'both']),
             'profile_description'=> $this->faker->paragraph(5),
         ];
     }

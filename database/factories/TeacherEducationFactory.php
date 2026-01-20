@@ -23,7 +23,8 @@ class TeacherEducationFactory extends Factory
                 'Education'
             ]),
             'institution'   => $this->faker->company() . ' University',
-            'year_completed'=> $this->faker->year(),
+            'start_year'    => $this->faker->year(),
+            'end_year'      => $this->faker->year(),
         ];
     }
 }

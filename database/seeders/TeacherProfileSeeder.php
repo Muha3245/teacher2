@@ -33,7 +33,8 @@ class TeacherProfileSeeder extends Seeder
                         'education_id'  => $educationId,
                         'field'         => fake()->word() . ' Studies',
                         'institution'   => fake()->company() . ' University',
-                        'year_completed'=> rand(2000, 2025),
+                        'start_year'    => rand(2000, 2025),
+                        'end_year'      => rand(2000, 2025),
                     ]);
                 }
 

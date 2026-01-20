@@ -16,7 +16,7 @@ class TeacherProfile extends Model
         'gender',
         'birth_date',
         'address',
-        'location_id',
+        'location',
         'charge_period',
         'min_price',
         'max_price',
