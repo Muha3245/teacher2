@@ -295,6 +295,8 @@ body {
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 100%;
+    flex-shrink: 0;
+    width: 23rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
 
@@ -331,9 +333,26 @@ body {
 
 .card-text {
     color: #6b7280;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    font-size: .9rem;
+    line-height: 1.4;
+    min-height: 4.2em; /* locks text height */
+    margin: .5rem 0;
+}
+
+/* Meta info */
+.card-meta {
+    font-size: .75rem;
+    color: #666;
+    margin-bottom: .25rem;
+}
+/* Subject badges */
+.badge {
+    background: #eef2ff;
+    color: #4338ca;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: .7rem;
+    margin-right: 4px;
 }
 
 .rating-stars {

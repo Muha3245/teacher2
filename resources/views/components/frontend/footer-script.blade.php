@@ -5,6 +5,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- Toaster     --}}
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="{{ asset('js/frontend/site.js') }}"> </script>
 
 
 @stack('frontendscripts')    

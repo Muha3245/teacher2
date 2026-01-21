@@ -51,7 +51,12 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow">
                         <li>
                             <a class="dropdown-item" href="{{route('teacher.dashboard')}}">
-                                Dashboard
+                                Teacher Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{route('teacher.dashboard')}}">
+                                User Dashboard
                             </a>
                         </li>
                         <li>
