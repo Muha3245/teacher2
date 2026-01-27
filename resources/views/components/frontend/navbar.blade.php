@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{route('teacher.dashboard')}}">
+                            <a class="dropdown-item" href="{{route('user.dashboard')}}">
                                 User Dashboard
                             </a>
                         </li>

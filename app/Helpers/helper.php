@@ -6,8 +6,10 @@ use App\Models\TeacherPhone;
 use App\Models\TeacherEducation;
 use App\Models\TeacherSubjects;
 use App\Models\Subject;
+use App\Models\Languages;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Education;
+use App\Models\StudentPosts;
 
 function TeacherProfile()
 {
@@ -36,4 +38,18 @@ function TeacherSubjects(){
     $subjects = TeacherSubjects::with('subject')->get();
     return $subjects;
 
+}
+function Languages()
+{
+    $languages = Languages::all();
+    return $languages;
+}
+
+function SingleStudentPost($userId)
+{
+    if (!$userId) {
+        return null;
+    }
+    $studentposts = StudentPosts::where('user_id', $userId)->get();
+    return $studentposts;
 }

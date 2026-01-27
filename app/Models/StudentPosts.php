@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class StudentPosts extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'location',
+        'phone',
+        'country_code',
+        'description',
+        'subjects',
+        'levelText',
+        'jobType',
+        'travel_distance',
+        'meeting_tutorplace',
+        'budget',
+        'budgetType',
+        'genderPreference',
+        'needSomeone',
+        'language',
+        'getutorfrom',
+        'files',
+        'status',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}

@@ -9,6 +9,7 @@ use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Admin\TeacherController;
 
 use App\Http\Controllers\Front\TeacherSearchController;
+use App\Http\Controllers\Front\UserDashboardController;
 use App\Http\Controllers\Front\TeacherDashboardController;
 
 
@@ -88,9 +89,15 @@ Route::post('/profile/create/step/{step}',function(request $request){
 })->name('profile.create');
 
 
-Route::get('/allprofiles', function() {
-    return TeacherProfile::all();
-});
+// Userdashboard
+Route::get('create/post', [UserDashboardController::class, 'create'])->name('user.createpost');
+Route::get('user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+Route::post('student/post', [UserDashboardController::class, 'PostStore'])->name('student.poststore');
+Route::get('edit/post/{id}', [UserDashboardController::class, 'EditStore'])->name('student.post.edit');
+Route::put('student/post/{id}', [UserDashboardController::class, 'PostUpdate'])->name('student.post.update');
+
+
+
 
 
 
