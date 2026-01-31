@@ -26,7 +26,7 @@ class TeacherDashboardController extends Controller
     }
     public function ProfileDetails(Request $request)
     {
-        $profile = TeacherProfile::with('user', 'subjects', 'location', 'educations', 'phones')->where('user_id', auth()->id())->firstOrFail();
+        $profile = TeacherProfile::with('user', 'subjects', 'location', 'educations', 'phones')->where('user_id', auth()->id())->first();
         $locations = Location::all();
         $subjects = Subject::all();
         $educations = Education::all();

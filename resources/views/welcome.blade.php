@@ -313,6 +313,7 @@
                 <div class="carousel">
 
                     @foreach ($teacherprofile as $teacher)
+                        <a href="{{ route('teacher.profile', $teacher->id)}}" style="list-style: none; text-decoration: none;">
                         <div class="custom-card">
 
                             {{-- Avatar --}}
@@ -358,6 +359,7 @@
                             </div>
 
                         </div>
+                        </a>
                     @endforeach
 
                 </div>

@@ -72,3 +72,57 @@ footer {
 .navbar {
     transition: all 0.3s ease;
 }
+/* home.css */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --sidebar-bg: #1e293b; /* Dark Slate for a modern look */
+}
+
+
+
+/* Premium Card Styling */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 1.25rem;
+    font-weight: 600;
+}
+
+/* DataTables Overrides */
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important; /* Creates a "row card" effect */
+}
+
+.table thead th {
+    background-color: #f8fafc !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    border: none !important;
+    padding: 15px !important;
+}
+
+.table tbody tr {
+    background-color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.table td {
+    padding: 15px !important;
+    border-top: 1px solid #f1f5f9 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+

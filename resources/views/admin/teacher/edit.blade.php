@@ -308,7 +308,7 @@
                                                                 <input type="number"
                                                                     name="edu[{{ $index }}][start]"
                                                                     class="form-control bg-white" placeholder="YYYY"
-                                                                    value="{{ $edu->start_year }} ">
+                                                                    value="{{ $edu->start_year }}">
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <label class="form-label small fw-bold">End Year (or

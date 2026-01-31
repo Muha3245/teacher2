@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use App\Models\TeacherProfile;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\PostController;
 
 use App\Http\Controllers\Front\TeacherSearchController;
 use App\Http\Controllers\Front\UserDashboardController;
@@ -25,32 +26,35 @@ Route::get('/admin', function () {
 
 
 // Admin side
-Route::get('/admin/user',[UserController::class, 'index'])->name('admin.user.index');
-    //Teacher 
-Route::get('/admin/teacher/profile',[TeacherController::class, 'index'])->name('admin.teacher.index');
-Route::get('/admin/teacher/create',[TeacherController::class, 'create'])->name('admin.teacher.create');
-Route::post('/admin/teacher/store',[TeacherController::class, 'store'])->name('admin.teacher.store');
-Route::get('/admin/teacher/{teacher}/edit',[TeacherController::class, 'edit'])->name('admin.teacher.edit');
-Route::put('/admin/teacher/{teacher}',[TeacherController::class, 'update'])->name('admin.teacher.update');
-Route::delete('/admin/teacher/{teacher}',[TeacherController::class, 'destroy'])->name('admin.teacher.delete');
+Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user.index');
+//Teacher 
+Route::get('/admin/teacher/profile', [TeacherController::class, 'index'])->name('admin.teacher.index');
+Route::get('/admin/teacher/create', [TeacherController::class, 'create'])->name('admin.teacher.create');
+Route::post('/admin/teacher/store', [TeacherController::class, 'store'])->name('admin.teacher.store');
+Route::get('/admin/teacher/{teacher}/edit', [TeacherController::class, 'edit'])->name('admin.teacher.edit');
+Route::put('/admin/teacher/{teacher}', [TeacherController::class, 'update'])->name('admin.teacher.update');
+Route::delete('/admin/teacher/{teacher}', [TeacherController::class, 'destroy'])->name('admin.teacher.delete');
 
-    
+Route::get('admin/teacher/post',[PostController::class, 'index'])->name('admin.post.index');
+
+
+
 
 
 
 // Frontend side
-      // Auth
-Route::get('/loginpage',[AuthController::class, 'LoginPage'])->name('loginpage');
-Route::get('auth/google',[AuthController::class, 'GoogleLogin'])->name('auth.google');
-Route::get('auth/google-callback',[AuthController::class, 'GoogleAuth'])->name('auth.google.callback');
-Route::post('auth/register',[AuthController::class,'Register'])->name('auth.register');
-Route::post('auth/login',[AuthController::class,'Login'])->name('auth.login');
-Route::post('auth/logout',[AuthController::class,'Logout'])->name('auth.logout');
+// Auth
+Route::get('/loginpage', [AuthController::class, 'LoginPage'])->name('loginpage');
+Route::get('auth/google', [AuthController::class, 'GoogleLogin'])->name('auth.google');
+Route::get('auth/google-callback', [AuthController::class, 'GoogleAuth'])->name('auth.google.callback');
+Route::post('auth/register', [AuthController::class, 'Register'])->name('auth.register');
+Route::post('auth/login', [AuthController::class, 'Login'])->name('auth.login');
+Route::post('auth/logout', [AuthController::class, 'Logout'])->name('auth.logout');
 
 
-    // Teacherdashboard
-Route::get('/teacher/dashboard',[TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
-Route::get('/teacher/details' ,[TeacherDashboardController::class, 'ProfileDetails'])->name('teacher.details');
+// Teacherdashboard
+Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+Route::get('/teacher/details', [TeacherDashboardController::class, 'ProfileDetails'])->name('teacher.details');
 // Route::put('/user/teacher/{teacher}',[TeacherDashboardController::class, 'ProfileUpdate'])->name('user.teacher.update');
 
 Route::middleware(['auth'])->prefix('teacher/profile')->group(function () {
@@ -72,8 +76,6 @@ Route::middleware(['auth'])->prefix('teacher/profile')->group(function () {
 
     Route::put('/phone', [TeacherDashboardController::class, 'updatePhone'])
         ->name('teacher.profile.phone');
-
-        
 });
 
 Route::get('/createprofile', function () {
@@ -84,7 +86,7 @@ Route::get('/search-teachers', [TeacherSearchController::class, 'index'])
     ->name('search.teachers');
 
 
-Route::post('/profile/create/step/{step}',function(request $request){
+Route::post('/profile/create/step/{step}', function (request $request) {
     dd($request->all());
 })->name('profile.create');
 
@@ -98,6 +100,4 @@ Route::put('student/post/{id}', [UserDashboardController::class, 'PostUpdate'])-
 
 
 
-
-
-
+Route::get('teacher/{random}', [HomeController::class, 'ShowTeacherProfile'])->name('teacher.profile');

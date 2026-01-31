@@ -13,8 +13,8 @@
         <a href="{{ route('admin.teacher.index') }}" class="list-group-item list-group-item-action">
             <i class="bi bi-tags-fill me-2"></i> Teacher profiles
         </a>
-        <a href="#" class="list-group-item list-group-item-action">
-            <i class="bi bi-box-seam me-2"></i> Products
+        <a href="{{ route('admin.post.index') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-box-seam me-2"></i> Posts
         </a>
 
         <a href="#" class="list-group-item list-group-item-action text-danger mt-3"

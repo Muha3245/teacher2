@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" style="position: sticky;top:0;z-index:999;background:white;height:100px;">
     <div class="container">
         <a class="navbar-brand" href="\">
-            <i class="bi bi-fan me-2"></i>DashboardPro
+            <i class="bi bi-fan me-2"></i>EduTech
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>

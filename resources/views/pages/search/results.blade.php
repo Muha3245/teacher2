@@ -207,7 +207,9 @@
         @if ($teachers->count())
             <div class="row g-4">
                 @foreach ($teachers as $teacher)
+                
                     <div class="col-md-8">
+                        <a href="#">
                         <div class="teacher-card">
                             {{-- Profile Picture --}}
                             <img src="{{ $teacher->profile_picture ?? '' }}" alt="{{ $teacher->full_name }}"
@@ -242,7 +244,9 @@
 
                             </div>
                         </div>
+                        </a>
                     </div>
+                
                 @endforeach
             </div>
 
