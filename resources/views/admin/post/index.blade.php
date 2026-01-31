@@ -172,10 +172,12 @@
                 responsive: true,
                 pageLength: 10,
                 dom: '<"d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
-                buttons: [
-                    { extend: 'excel', className: 'btn btn-sm btn-outline-light' },
-                    { extend: 'pdf', className: 'btn btn-sm btn-outline-light' }
-                ],
+                buttons: [{
+                    extend: 'collection',
+                    text: '<i class="bi bi-download me-1"></i> Export',
+                    className: 'btn btn-outline-light btn-sm',
+                    buttons: ['copy', 'excel', 'pdf', 'print']
+                }],
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Search posts...",
