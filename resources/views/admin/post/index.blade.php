@@ -50,8 +50,8 @@
                             <td>
                                 <div class="small text-truncate" style="max-width: 150px;"><i class="bi bi-geo-alt text-danger me-1"></i>{{ $post->location }}</div>
                                 <small class="text-muted">
-                                    {{ $post->getutorfrom == 'home' ? '🏠 Home' : '🌐 Online' }} 
-                                    ({{ $post->meeting_tutorplace ? 'Tutor Place' : 'Student Place' }})
+                                    {{ $post->getutorfrom }} 
+                                    {{-- ({{ $post->meeting_tutorplace }}) --}}
                                 </small>
                             </td>
                             <td>
@@ -68,7 +68,12 @@
                                     {{ $currentStatus['label'] }}
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-flex align-center">
+                                <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#commentsModel{{ $post->id }}">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
                                 <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#postModal{{ $post->id }}">

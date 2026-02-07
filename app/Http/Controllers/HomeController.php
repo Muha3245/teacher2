@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TeacherProfile;
+use App\Models\StudentPosts;
 use Illuminate\Http\Request;
+use App\Models\TeacherProfile;
 
 class HomeController extends Controller
 {
@@ -13,5 +14,11 @@ class HomeController extends Controller
                 ->findOrFail($id);
                 
         return view("pages.teacherprofile", compact("profile"));
+    }
+
+    public function studensinglepost($id)
+    {
+        $singlepost = StudentPosts::with('user')->findOrFail($id);
+        return view('singlepost', compact('singlepost'));
     }
 }

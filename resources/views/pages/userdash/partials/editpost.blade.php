@@ -125,10 +125,11 @@
 
             <div class="row g-4 mb-4">
                 <div class="col-md-6">
-                    <label class="form-label">Tutor Location Preference</label>
+                    <label class="form-label">Hire Tutor For</label>
                     <select name="getutorfrom" class="form-select">
-                        <option value="Anywhere" @if ($post->getutorfrom == 'Anywhere') selected @endif>Anywhere</option>
-                        <option value="My city" @if ($post->getutorfrom == 'My city') selected @endif>From my city</option>
+                        <option value="online" @if ($post->getutorfrom == 'online') selected @endif>Online</option>
+                        <option value="home" @if ($post->getutorfrom == 'home') selected @endif>Onlocation(home)</option>
+                        <option value="assignment" @if ($post->getutorfrom == 'assignment') selected @endif>Assignment</option>
                     </select>
                 </div>
                 <div class="col-md-6">

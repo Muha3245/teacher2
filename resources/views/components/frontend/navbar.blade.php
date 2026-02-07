@@ -1,93 +1,121 @@
-<nav class="navbar navbar-expand-lg" style="position: sticky;top:0;z-index:999;background:white;height:100px;">
+@php
+    $user = auth()->user();
+    $profileImage = $user && $user->profile_picture ? asset($user->profile_picture) : null;
+    $initial = $user ? strtoupper(substr($user->name, 0, 1)) : '';
+
+    // Notifications: posts with comments where seen_at is null
+    $notifications = spostnotify(); // collection of posts with unseen comments
+@endphp
+
+<nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm" style="height:100px; z-index:999;">
     <div class="container">
-        <a class="navbar-brand" href="\">
+
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold" href="{{ url('/') }}">
             <i class="bi bi-fan me-2"></i>EduTech
         </a>
+
+        <!-- Mobile Toggle -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Center Menu -->
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="\">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+            <ul class="navbar-nav gap-2">
+                <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url('/') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">Features</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">Contact</a></li>
             </ul>
         </div>
-        @php
-            $user = auth()->user();
 
-            $profileImage = $user && $user->profile_picture ? asset($user->profile_picture) : null;
+        @if(auth()->check())
+        <!-- Right Side -->
+        <div class="d-none d-lg-flex align-items-center gap-4">
 
-            $initial = $user ? strtoupper(substr($user->name, 0, 1)) : '';
-        @endphp
-
-        @if (auth()->check())
-            <div class="d-none d-lg-flex align-items-center gap-3 position-relative">
-
-                <!-- Avatar Button -->
-                <div class="dropdown">
-                    <button class="btn p-0 border-0 bg-transparent d-flex align-items-center gap-2"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-
-                        <!-- Profile Image OR Name Avatar -->
-                        @if ($profileImage)
-                            <img src="{{ $profileImage }}" alt="Profile" class="rounded-circle" width="40"
-                                height="40">
-                        @else
-                            <div class="rounded-circle  text-white d-flex align-items-center justify-content-center"
-                                style="width:40px;height:40px;font-weight:600;background:#ea4c54;">
-                                {{ $initial }}
-                            </div>
-                        @endif
-
-                        <!-- User Name -->
-                        <span class="fw-semibold text-dark">
-                            {{ $user->name }}
+            <!-- 🔔 Notifications -->
+            <div class="dropdown position-relative">
+                <button class="btn p-0 border-0 bg-transparent position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell fs-5"></i>
+                    @php
+                        $unseenCount = $notifications->sum(fn($post) => $post->comments->whereNull('seen_at')->count());
+                    @endphp
+                    @if($unseenCount > 0)
+                        <span class="position-absolute text-white top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ $unseenCount }}
                         </span>
-                    </button>
+                    @endif
+                </button>
 
-                    <!-- Dropdown Menu -->
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-                        <li>
-                            <a class="dropdown-item" href="{{route('teacher.dashboard')}}">
-                                Teacher Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{route('user.dashboard')}}">
-                                User Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <form action="{{ route('auth.logout') }}" method="POST">
-                                @csrf
-                                <button class="dropdown-item text-danger">
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                <!-- Dropdown Menu -->
+                <ul class="dropdown-menu dropdown-menu-end shadow p-0" style="width:350px;">
+                    <li class="dropdown-header fw-semibold px-3 py-2">Notifications</li>
 
+                    @forelse($notifications as $post)
+                        @foreach($post->comments->whereNull('seen_at') as $comment)
+                            <li>
+                                <a class="dropdown-item d-flex gap-3 py-2" href="{{ route('student.post.show', $post->id) }}">
+                                    <i class="bi bi-chat-dots text-primary fs-5"></i>
+                                    <div>
+                                        <div class="fw-semibold">{{ $comment->user->name }} commented</div>
+                                        <small class="text-muted">{{ Str::limit($comment->content, 50) }}</small><br>
+                                        <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                    @empty
+                        <li>
+                            <div class="text-center text-muted py-2">No new notifications</div>
+                        </li>
+                    @endforelse
+
+                    <li><hr class="dropdown-divider m-0"></li>
+                    <li>
+                        <a class="dropdown-item text-center fw-semibold text-primary" href="#">
+                            View all notifications
+                        </a>
+                    </li>
+                </ul>
             </div>
+
+            <!-- 👤 User Menu -->
+            <div class="dropdown">
+                <button class="btn p-0 border-0 bg-transparent d-flex align-items-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if ($profileImage)
+                        <img src="{{ $profileImage }}" class="rounded-circle" width="40" height="40">
+                    @else
+                        <div class="rounded-circle text-white d-flex align-items-center justify-content-center"
+                             style="width:40px;height:40px;background:#ea4c54;font-weight:600;">
+                            {{ $initial }}
+                        </div>
+                    @endif
+                    <span class="fw-semibold">{{ $user->name }}</span>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+                    <li><a class="dropdown-item" href="{{ route('teacher.dashboard') }}">Teacher Dashboard</a></li>
+                    <li><a class="dropdown-item" href="{{ route('user.dashboard') }}">User Dashboard</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form action="{{ route('auth.logout') }}" method="POST">
+                            @csrf
+                            <button class="dropdown-item text-danger">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
         @else
-            <div class="d-none d-lg-flex align-items-center gap-2">
-                <a href="{{ route('loginpage') }}">
-                    <button class="btn btn-nav-outline">Login</button>
-                </a>
-                <button class="btn btn-nav-primary">Sign Up Now</button>
-            </div>
+        <!-- Guest Buttons -->
+        <div class="d-none d-lg-flex gap-2">
+            <a href="{{ route('loginpage') }}" class="btn btn-outline-primary">Login</a>
+            <a href="#" class="btn btn-primary">Sign Up Now</a>
+        </div>
         @endif
-
 
     </div>
 </nav>

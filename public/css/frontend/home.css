@@ -402,3 +402,66 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+
+
+/* Teacher jobs */
+
+.teacher-jobs {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.teacher-jobs .layout-container {
+    display: flex;
+    background:url('https://assets2.teacheron.com/resources/assets/img/customImages/17.png');
+    justify-content: center;
+    align-items: center;
+    gap: 80px; /* Space between the two main sections */
+    flex-wrap: wrap;
+    padding-bottom: 80px;
+}
+
+.teacher-jobs .section-header .title {
+    color: #3498db; /* The light blue color from the image */
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 200px); /* Creates 2 columns of fixed width */
+    gap: 15px;
+}
+
+button {
+    background-color: #ffffff;
+    border: solid 1px #bbb;
+    padding: 5px 10px;
+    font-family: "Times New Roman", Times, serif; /* Serif font as seen in image */
+    font-size: 1.1rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+button:hover {
+    background-color: #f9f9f9;
+    border-color: #aaa;
+}
+
+/* Responsive adjustment for mobile */
+@media (max-width: 600px) {
+    .layout-container {
+        gap: 40px;
+    }
+    .grid {
+        grid-template-columns: 1fr; /* Stack buttons on very small screens */
+    }
+}

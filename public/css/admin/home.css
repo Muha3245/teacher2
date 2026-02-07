@@ -8,53 +8,81 @@ body {
     width: 100%;
 }
 
+/* Sidebar Modernization */
 #sidebar-wrapper {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 260px;
+    max-width: 260px;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     height: 100vh;
-    background-color: #212529;
-    color: #fff;
+    background-color: #ffffff; /* Clean white background */
     position: sticky;
     top: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #e2e8f0;
 }
 
 #sidebar-wrapper .sidebar-heading {
-    font-size: 1.4rem;
-    background-color: #343a40;
+    border-bottom: 1px solid #f1f5f9;
 }
 
+/* Menu Labels */
+.menu-label {
+    letter-spacing: 1px;
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+/* List Items */
 #sidebar-wrapper .list-group-item {
-    background: none;
-    color: #fff;
+    background: transparent;
+    color: #64748b; /* Soft slate gray */
     border: none;
-    transition: all 0.3s;
+    padding: 0.8rem 1.5rem;
+    margin: 0.2rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
 }
 
-#sidebar-wrapper .list-group-item:hover,
+/* Hover Effect */
+#sidebar-wrapper .list-group-item:hover {
+    background-color: #f8fafc;
+    color: #3b82f6; /* Blue primary */
+    transform: translateX(5px);
+}
+
+/* Active State - Matching your blue theme */
 #sidebar-wrapper .list-group-item.active {
-    background-color: #495057;
-    color: #fff;
+    background: #eff6ff; /* Very light blue */
+    color: #2563eb; /* Deep Blue */
+    font-weight: 600;
 }
 
-#page-content-wrapper {
-    width: 100%;
-    background-color: #f8f9fa;
+#sidebar-wrapper .list-group-item.active i {
+    color: #2563eb;
 }
 
-footer {
-    background: #fff;
+/* Logout Styling */
+.logout-link {
+    color: #ef4444 !important; /* Red for logout */
 }
 
-#wrapper {
-    display: flex;
-    width: 100%;
-    transition: all 0.3s ease;
+.logout-link:hover {
+    background-color: #fef2f2 !important;
 }
 
-/* Sidebar width */
-#sidebar-wrapper {
-    width: 250px;
-    transition: all 0.3s ease;
+/* Brand Logo Icon Animation */
+.brand-logo i {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+#sidebar-wrapper:hover .brand-logo i {
+    transform: rotate(-10deg) scale(1.1);
 }
 
 /* Page content */

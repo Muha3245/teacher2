@@ -42,6 +42,7 @@ Route::get('admin/teacher/post',[PostController::class, 'index'])->name('admin.p
 
 
 
+
 // Frontend side
 // Auth
 Route::get('/loginpage', [AuthController::class, 'LoginPage'])->name('loginpage');
@@ -85,6 +86,13 @@ Route::get('/createprofile', function () {
 Route::get('/search-teachers', [TeacherSearchController::class, 'index'])
     ->name('search.teachers');
 
+Route::get('/search-teacherpost' ,[TeacherSearchController::class, 'searchTeachers'])->name('search.teachersposts');
+Route::get('/search-studentpost' ,[TeacherSearchController::class, 'searchStudent'])->name('search.studentposts');
+Route::get('/allposts' ,[TeacherSearchController::class, 'TeacherPosts'])->name('teachersposts');
+Route::get('/studentpost' ,[TeacherSearchController::class, 'StudentPosts'])->name('studentposts');
+Route::get('/post/{id}' ,[TeacherSearchController::class, 'SinglePosts'])->name('student.post.show');
+  
+
 
 Route::post('/profile/create/step/{step}', function (request $request) {
     dd($request->all());
@@ -101,3 +109,12 @@ Route::put('student/post/{id}', [UserDashboardController::class, 'PostUpdate'])-
 
 
 Route::get('teacher/{random}', [HomeController::class, 'ShowTeacherProfile'])->name('teacher.profile');
+
+
+// Comments and Replyies
+
+Route::post('/posts/{post}/comment', [UserDashboardController::class, 'StoreComments'])->name('jobs.comment');
+Route::post('/comments/{comment}/reply', [UserDashboardController::class, 'StoreReply'])->name('comments.reply');
+
+
+Route::get('singlepos/{id}',[HomeController::class,'studensinglepost'])->name('studentsinglepost');

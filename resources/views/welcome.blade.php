@@ -2,7 +2,7 @@
 @push('frontendstyles')
 @endpush
 @section('content')
-     <x-frontend.navbar />
+    <x-frontend.navbar />
 
     @php
         $teacherprofile = TeacherProfile();
@@ -35,18 +35,18 @@
                                 <span class="material-symbols-outlined">search</span>
                             </div>
                             <select name="subject" class="select-input">
-                            <option value="">Select Subject</option>
+                                <option value="">Select Subject</option>
 
-                            @foreach($teachersubjects as $subject)
-                                <option value="{{ $subject->subject->name }}"
-                                    {{ request('subject') == $subject->id ? 'selected' : '' }}>
-                                    {{ $subject->subject->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="select-icon">
-                            <span class="material-symbols-outlined">expand_more</span>
-                        </div>
+                                @foreach ($teachersubjects as $subject)
+                                    <option value="{{ $subject->subject->name }}"
+                                        {{ request('subject') == $subject->id ? 'selected' : '' }}>
+                                        {{ $subject->subject->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="select-icon">
+                                <span class="material-symbols-outlined">expand_more</span>
+                            </div>
                         </div>
                         <div class="divider"></div>
                         <div class="form-group">
@@ -192,6 +192,40 @@
             </div>
         </div>
     </section>
+
+    {{-- Teacher and teacher jobs --}}
+
+    <section class="teacher-jobs">
+        <div class="layout-container">
+            <div class="left-section">
+                <div class="section-header">
+                    <h1 class="title">
+                        Teachers
+                    </h1>
+                </div>
+                <div class="grid">
+                    <button><a href="{{ route('teachersposts') }}"
+                            style="list-style: none;text-decoration:none; color:black;">Teacher</a></button>
+                    <button data-type="online">Online Teachers</button>
+                    <button data-type="home">Home Teachers</button>
+                    <button data-type="assignment">Assignment Help</button>
+                </div>
+            </div>
+            <div class="right-section">
+                <div class="section-header">
+                    <h1 class="title">
+                        Teachers jobs
+                    </h1>
+                </div>
+                <div class="grid">
+                    <button><a href="{{ route('studentposts') }}"
+                            style="list-style: none;text-decoration:none; color:black;">Teacher jobs</a></button>
+                    <button>Online Teacheing</button>
+                    <button>Home Teacheing</button>
+                    <button>Assignment jobbs</button>
+                </div>
+            </div>
+    </section>
     <!-- Features Section -->
     <section class="features-section">
         <div class="layout-container">
@@ -313,52 +347,53 @@
                 <div class="carousel">
 
                     @foreach ($teacherprofile as $teacher)
-                        <a href="{{ route('teacher.profile', $teacher->id)}}" style="list-style: none; text-decoration: none;">
-                        <div class="custom-card">
+                        <a href="{{ route('teacher.profile', $teacher->id) }}"
+                            style="list-style: none; text-decoration: none;">
+                            <div class="custom-card">
 
-                            {{-- Avatar --}}
-                            <img class="card-avatar" src="{{ $teacher->profile_picture }}"
-                                alt="{{ $teacher->full_name }}"
-                                onerror="this.onerror=null;this.src='https://randomuser.me/api/portraits/{{ rand(0, 1) ? 'men' : 'women' }}/{{ rand(1, 99) }}.jpg';">
+                                {{-- Avatar --}}
+                                <img class="card-avatar" src="{{ $teacher->profile_picture }}"
+                                    alt="{{ $teacher->full_name }}"
+                                    onerror="this.onerror=null;this.src='https://randomuser.me/api/portraits/{{ rand(0, 1) ? 'men' : 'women' }}/{{ rand(1, 99) }}.jpg';">
 
-                            {{-- Full headline (title = no limit) --}}
-                            <h4 class="card-title" title="{{ $teacher->full_name }}">
-                                {{ $teacher->full_name }}
-                            </h4>
+                                {{-- Full headline (title = no limit) --}}
+                                <h4 class="card-title" title="{{ $teacher->full_name }}">
+                                    {{ $teacher->full_name }}
+                                </h4>
 
-                            {{-- Subjects (dynamic) --}}
-                            <div class="card-meta">
-                                @foreach ($teacher->subjects->take(3) as $sub)
-                                    <span class="badge">{{ $sub->subject->name ?? '' }}</span>
-                                @endforeach
+                                {{-- Subjects (dynamic) --}}
+                                <div class="card-meta">
+                                    @foreach ($teacher->subjects->take(3) as $sub)
+                                        <span class="badge">{{ $sub->subject->name ?? '' }}</span>
+                                    @endforeach
+                                </div>
+
+                                {{-- Education --}}
+                                <div class="card-meta">
+                                    <span class="material-symbols-outlined">school</span>
+                                    <span>
+                                        {{ $teacher->educations->first()->education?->degree ?? 'Expert' }}
+                                    </span>
+                                </div>
+
+                                {{-- Description (SAME length for all cards) --}}
+                                <p class="card-text">
+                                    {{ \Illuminate\Support\Str::limit(
+                                        strip_tags($teacher->headline ?? 'Experienced professional tutor providing high-quality learning sessions.'),
+                                        110,
+                                    ) }}
+                                </p>
+
+                                {{-- Rating --}}
+                                <div class="rating-stars text-warning">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+
                             </div>
-
-                            {{-- Education --}}
-                            <div class="card-meta">
-                                <span class="material-symbols-outlined">school</span>
-                                <span>
-                                    {{ $teacher->educations->first()->education?->degree ?? 'Expert' }}
-                                </span>
-                            </div>
-
-                            {{-- Description (SAME length for all cards) --}}
-                            <p class="card-text">
-                                {{ \Illuminate\Support\Str::limit(
-                                    strip_tags($teacher->headline ?? 'Experienced professional tutor providing high-quality learning sessions.'),
-                                    110,
-                                ) }}
-                            </p>
-
-                            {{-- Rating --}}
-                            <div class="rating-stars text-warning">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                            </div>
-
-                        </div>
                         </a>
                     @endforeach
 
@@ -450,4 +485,38 @@
     </section>
 @endsection
 @push('frontendscripts')
+    <script>
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                992: {
+                    slidesPerView: 2,
+                },
+                1200: {
+                    slidesPerView: 2,
+                },
+            },
+        });
+    </script>
+    <script>
+        // gsap.from(".features-section .card", {
+        //     opacity: 1,
+        //     y: 40,
+        //     duration: 0.8,
+        //     stagger: 0.15
+        // });
+    </script>
 @endpush

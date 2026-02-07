@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/css/intlTelInput.css" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+        <link rel="stylesheet" href={{ asset('css/frontend/home.css')}}>
          <style>
         :root {
             --primary-color: #6366f1;
@@ -143,7 +145,8 @@
     @stack('userdashstyles')
 </head>
 <body>
-    
+        <x-frontend.navbar />
+
     <main class="container my-5">
         @yield('content')
     </main>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Models\Comment;
 use App\Models\StudentPosts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,6 @@ class UserDashboardController extends Controller
     public function create()
     {
         return view('pages.userdash.partials.createpost');
-    
     }
     public function PostStore(Request $request)
     {
@@ -36,7 +36,7 @@ class UserDashboardController extends Controller
             'needSomeone' => 'nullable|string|in:Urgently,In a week,In a month,Flexible',
             'languages' => 'nullable|array',
             'languages.*' => 'string|max:50',
-            'getutorfrom' => 'nullable|string|in:Anywhere,"My city"',
+            'getutorfrom' => 'nullable|string|in:Anywhere,online,assignment,home',
             'files' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
         ]);
 
@@ -76,34 +76,23 @@ class UserDashboardController extends Controller
     {
         $post = StudentPosts::where('id', $id)->first();
 
-        // dd($post);
         return view('pages.userdash.partials.editpost', compact('post'));
     }
 
     public function PostUpdate(Request $request, $id)
     {
-        // dd($request->all());
-        
-        // dd($validaiton);
-
-
         $post = StudentPosts::findOrFail($id);
 
-        // Handle file upload
-            if ($request->hasFile('files')) {
-
-                // delete old file
-                if ($post->files && Storage::exists('public/student_files/'.$post->files)) {
-                    Storage::delete('public/student_files/'.$post->files);
-                }
-
-                // store new file
-                $file = $request->file('files');
-                $fileName = time().'_'.$file->getClientOriginalName();
-                $file->storeAs('student_files', $fileName, 'public');
-
-                $post->files = $fileName;
+        if ($request->hasFile('files')) {
+            if ($post->files && Storage::exists('public/student_files/' . $post->files)) {
+                Storage::delete('public/student_files/' . $post->files);
             }
+            $file = $request->file('files');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('student_files', $fileName, 'public');
+
+            $post->files = $fileName;
+        }
 
         $post->update([
             'user_id' => $request->user_id,
@@ -126,5 +115,31 @@ class UserDashboardController extends Controller
         ]);
 
         return redirect()->route('user.dashboard')->with('success', 'Requirement updated successfully!');
+    }
+
+    public function StoreComments(Request $request, StudentPosts $post)
+    {
+        $request->validate([
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->comment,
+        ]);
+        return back()->with('success', 'Comment added successfully!');
+    }
+    public function StoreReply(Request $request, Comment $comment)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $comment->replies()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
+
+        return back()->with('success', 'Reply added successfully!');
     }
 }

@@ -34,4 +34,11 @@ class StudentPosts extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function comments() {
+        return $this->hasMany(Comment::class,'post_id','id');
+    }
+
+    public function ratings() {
+        return $this->hasMany(Rating::class);
+    }
 }

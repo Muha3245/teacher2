@@ -34,10 +34,10 @@ function Subjects()
     $subjects = Subject::all();
     return $subjects;
 }
-function TeacherSubjects(){
+function TeacherSubjects()
+{
     $subjects = TeacherSubjects::with('subject')->get();
     return $subjects;
-
 }
 function Languages()
 {
@@ -52,4 +52,16 @@ function SingleStudentPost($userId)
     }
     $studentposts = StudentPosts::where('user_id', $userId)->get();
     return $studentposts;
+}
+
+function spostnotify()
+{
+    $posts = StudentPosts::whereHas('comments', function ($query) {
+        $query->whereNull('seen_at');
+    })
+        ->with(['comments' => function ($query) {
+            $query->whereNull('seen_at');
+        }])
+        ->get();
+    return $posts;
 }
