@@ -29,7 +29,7 @@
         </a>
         <div class="menu-label text-muted small fw-bold px-4 mt-4 mb-2 text-uppercase">Connections</div>
 
-        <a href="{{ route('admin.teacher.index') }}" class="list-group-item list-group-item-action {{ request()->is('admin/teacher*') ? 'active' : '' }}">
+        <a href="{{ route('admin.connection') }}" class="list-group-item list-group-item-action {{ request()->is('admin/teacher*') ? 'active' : '' }}">
            <i class="bi bi-diagram-2"></i> connections
         </a>
 

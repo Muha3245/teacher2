@@ -285,6 +285,7 @@
                         <form action="{{ route('comments.reply', ['comment' => $comment->id]) }}" method="POST"
                             class="mt-3 d-none" id="reply-form-{{ $comment->id }}">
                             @csrf
+                            <input type="hidden" name="parant_id" value="{{ $comment->user_id }}">
                             <textarea name="content" class="form-control rounded-3" rows="2" placeholder="Write your reply..."></textarea>
 
                             <button type="submit" class="btn btn-sm btn-primary mt-2 rounded-pill">
@@ -317,6 +318,7 @@
                                     <form action="{{ route('comments.reply', $reply->id) }}" method="POST"
                                         class="mt-3 d-none" id="reply-form-reply-{{ $reply->id }}">
                                         @csrf
+                                        <input type="hidden" name="parant_id" value="{{ $comment->user_id }}">
                                         <textarea name="content" class="form-control rounded-3" rows="2" placeholder="Write your reply..."></textarea>
 
                                         <button type="submit" class="btn btn-sm btn-primary mt-2 rounded-pill">

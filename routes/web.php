@@ -3,12 +3,14 @@
 use Illuminate\Http\Request;
 use App\Models\TeacherProfile;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CoinController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ConnectionController;
+
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Admin\TeacherController;
-use App\Http\Controllers\Admin\PostController;
-
 use App\Http\Controllers\Front\TeacherSearchController;
 use App\Http\Controllers\Front\UserDashboardController;
 use App\Http\Controllers\Front\TeacherDashboardController;
@@ -27,6 +29,12 @@ Route::get('/admin', function () {
 
 // Admin side
 Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user.index');
+Route::post('/admin/coins/add', [UserController::class, 'addCoins'])->name('admin.coins.add');
+
+Route::get('/admin/connection',[ConnectionController::class, 'index'])->name('admin.connection');
+
+
+
 //Teacher 
 Route::get('/admin/teacher/profile', [TeacherController::class, 'index'])->name('admin.teacher.index');
 Route::get('/admin/teacher/create', [TeacherController::class, 'create'])->name('admin.teacher.create');
@@ -35,7 +43,11 @@ Route::get('/admin/teacher/{teacher}/edit', [TeacherController::class, 'edit'])-
 Route::put('/admin/teacher/{teacher}', [TeacherController::class, 'update'])->name('admin.teacher.update');
 Route::delete('/admin/teacher/{teacher}', [TeacherController::class, 'destroy'])->name('admin.teacher.delete');
 
+
+
 Route::get('admin/teacher/post',[PostController::class, 'index'])->name('admin.post.index');
+
+Route::post('/jobs/check-coins', [CoinController::class, 'checkCoins'])->name('jobs.checkCoins');
 
 
 
@@ -114,6 +126,7 @@ Route::get('teacher/{random}', [HomeController::class, 'ShowTeacherProfile'])->n
 // Comments and Replyies
 
 Route::post('/posts/{post}/comment', [UserDashboardController::class, 'StoreComments'])->name('jobs.comment');
+
 Route::post('/comments/{comment}/reply', [UserDashboardController::class, 'StoreReply'])->name('comments.reply');
 
 

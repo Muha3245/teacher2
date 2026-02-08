@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\TeacherProfile;
-use App\Models\Location;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
+use App\Models\Location;
 use App\Models\Education;
+use App\Models\Connection;
+use App\Models\CoinHistory;
 use Illuminate\Http\Request;
+use App\Models\TeacherProfile;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
     public function index()
     {
         $teachers = TeacherProfile::get();
-        return view('admin.teacher.index' ,compact('teachers'));
+        return view('admin.teacher.index', compact('teachers'));
     }
 
     public function create()
@@ -24,16 +26,16 @@ class TeacherController extends Controller
         $locations = Location::all();
         $subjects = Subject::all();
         $educations = Education::all();
-        return view('admin.teacher.create' ,compact('locations', 'subjects', 'educations'));
+        return view('admin.teacher.create', compact('locations', 'subjects', 'educations'));
     }
-    
-   
+
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
-            'country_code'=>'required|string|max:100',
+            'country_code' => 'required|string|max:100',
             'number' => 'required|string|max:100',
             'headline' => 'nullable|string|max:255',
             'gender' => 'nullable|in:Male,Female,Other',
@@ -69,66 +71,66 @@ class TeacherController extends Controller
         ]);
 
 
-            // ================= PROFILE IMAGE =================
-            $imagePath = null;
-            if ($request->hasFile('profile_image')) {
-                $file = $request->file('profile_image');
-                $filename = date('YmdHi') . '_' . $file->getClientOriginalName();
-                $file->move(public_path('profile_pictures'), $filename);
-                $imagePath = 'profile_pictures/' . $filename;
-            }
+        // ================= PROFILE IMAGE =================
+        $imagePath = null;
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $filename = date('YmdHi') . '_' . $file->getClientOriginalName();
+            $file->move(public_path('profile_pictures'), $filename);
+            $imagePath = 'profile_pictures/' . $filename;
+        }
 
-            // ================= CREATE TEACHER PROFILE =================
-            $teacher = TeacherProfile::create([
-                'user_id' => Auth::id(), // or admin-selected user
-                'profile_picture' => $imagePath,
-                'full_name' => $request->full_name,
-                'headline' => $request->headline,
-                'gender' => $request->gender,
-                'birth_date' => $request->birth_date,
-                'address' => $request->address,
-                'location_id' => $request->location_id,
-                'charge_period' => $request->charge_period,
-                'min_price' => $request->min_price,
-                'max_price' => $request->max_price,
-                'years_teaching' => $request->years_teaching,
-                'years_online' => $request->years_online,
-                'willing_to_travel' => $request->has('willing_to_travel'),
-                'travel_km' => $request->travel_km,
-                'has_digital_pen' => $request->has('has_digital_pen'),
-                'helps_homework' => $request->has('helps_homework'),
-                'opportunity' => $request->opportunity,
-                'profile_description' => $request->profile_description,
+        // ================= CREATE TEACHER PROFILE =================
+        $teacher = TeacherProfile::create([
+            'user_id' => Auth::id(), // or admin-selected user
+            'profile_picture' => $imagePath,
+            'full_name' => $request->full_name,
+            'headline' => $request->headline,
+            'gender' => $request->gender,
+            'birth_date' => $request->birth_date,
+            'address' => $request->address,
+            'location_id' => $request->location_id,
+            'charge_period' => $request->charge_period,
+            'min_price' => $request->min_price,
+            'max_price' => $request->max_price,
+            'years_teaching' => $request->years_teaching,
+            'years_online' => $request->years_online,
+            'willing_to_travel' => $request->has('willing_to_travel'),
+            'travel_km' => $request->travel_km,
+            'has_digital_pen' => $request->has('has_digital_pen'),
+            'helps_homework' => $request->has('helps_homework'),
+            'opportunity' => $request->opportunity,
+            'profile_description' => $request->profile_description,
+        ]);
+
+        // ================= ATTACH SUBJECTS (WITH LEVELS) =================
+        foreach ($request->subjects as $subject) {
+            $teacher->subjects()->attach($subject['id'], [
+                'from_level' => $subject['from'],
+                'to_level' => $subject['to'],
             ]);
+        }
 
-            // ================= ATTACH SUBJECTS (WITH LEVELS) =================
-            foreach ($request->subjects as $subject) {
-                $teacher->subjects()->attach($subject['id'], [
-                    'from_level' => $subject['from'],
-                    'to_level' => $subject['to'],
-                ]);
-            }
+        // ================= ATTACH EDUCATIONS =================
+        foreach ($request->edu as $edu) {
+            $teacher->educations()->attach($edu['edu'], [
+                'institution' => $edu['institution'],
+                'year_completed' => $edu['start'] . 'to' . $edu['end'],
 
-            // ================= ATTACH EDUCATIONS =================
-            foreach ($request->edu as $edu) {
-                $teacher->educations()->attach($edu['edu'], [
-                    'institution' => $edu['institution'],
-                    'year_completed' => $edu['start'] .'to'. $edu['end'],
-                    
-                ]);
-            }
+            ]);
+        }
 
-            // ================= ATTACH PHONE NUMBERS =================
-            
-                $teacher->phones()->create([
-                    'phone' => $request->number,
-                    'country_code' => $request->country_code ?? '',
-                    'is_primary' => 1,
-                ]);
-            
+        // ================= ATTACH PHONE NUMBERS =================
+
+        $teacher->phones()->create([
+            'phone' => $request->number,
+            'country_code' => $request->country_code ?? '',
+            'is_primary' => 1,
+        ]);
 
 
-        
+
+
 
         return redirect()
             ->route('admin.teacher.index')
@@ -166,14 +168,14 @@ class TeacherController extends Controller
             '+234' => 'Nigeria',
         ];
 
-        return view('admin.teacher.edit', compact('teacher','locations','subjects','educations','countryCodes'));
+        return view('admin.teacher.edit', compact('teacher', 'locations', 'subjects', 'educations', 'countryCodes'));
     }
 
 
     public function update(Request $request, TeacherProfile $teacher)
     {
         // dd($request->all());
-        
+
 
         // PROFILE IMAGE
         $imagepath = $teacher->profile_picture;
@@ -208,14 +210,15 @@ class TeacherController extends Controller
         // SUBJECTS
         foreach ($request->subjects as $subject) {
             $teacher->subjects()->updateOrCreate(
-             [
-                'teacher_profile_id' => $teacher->id,
-                'subject_id' => $subject['id'],
-            ],
-            [
-                'from_level' => $subject['from'],
-                'to_level' => $subject['to'],
-            ]);
+                [
+                    'teacher_profile_id' => $teacher->id,
+                    'subject_id' => $subject['id'],
+                ],
+                [
+                    'from_level' => $subject['from'],
+                    'to_level' => $subject['to'],
+                ]
+            );
         }
 
         // EDUCATIONS
@@ -227,9 +230,10 @@ class TeacherController extends Controller
                     'education_id' => $edu['edu'],
                 ],
                 [
-                'institution' => $edu['institution'],
-                'year_completed' => $edu['start'] .'to'. $edu['end'],
-            ]);
+                    'institution' => $edu['institution'],
+                    'year_completed' => $edu['start'] . 'to' . $edu['end'],
+                ]
+            );
         }
 
         // PHONE
@@ -258,8 +262,7 @@ class TeacherController extends Controller
         return redirect()
             ->route('admin.teacher.index')
             ->with('success', 'Teacher profile deleted successfully!');
-
     }
 
-  
+    
 }

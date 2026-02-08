@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\StudentPosts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\StudentPost;
 use Illuminate\Support\Facades\Storage;
 
 class UserDashboardController extends Controller
@@ -123,20 +124,25 @@ class UserDashboardController extends Controller
             'comment' => 'required|string|max:1000',
         ]);
 
-        $post->comments()->create([
+        $comment = $post->comments()->create([
             'user_id' => auth()->id(),
             'content' => $request->comment,
         ]);
+            $post->user->notify(
+                new StudentPost($post, auth()->user(), $comment)
+            );
         return back()->with('success', 'Comment added successfully!');
     }
     public function StoreReply(Request $request, Comment $comment)
     {
+        // dd($request->all());
         $request->validate([
             'content' => 'required|string|max:1000',
         ]);
 
         $comment->replies()->create([
             'user_id' => auth()->id(),
+            'parant_id'=>$request->parant_id,
             'content' => $request->content,
         ]);
 

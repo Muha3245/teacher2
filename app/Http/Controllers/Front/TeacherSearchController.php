@@ -94,8 +94,19 @@ class TeacherSearchController extends Controller
 
         return view('studentpost', compact('studentposts'));
     }
-    public function SinglePosts($id)
+    public function SinglePosts( Request $request, $id)
     {
+        // dd($request->all());
+        if ($request->has('nid')) {
+            $notification = auth()->user()
+                ->notifications()
+                ->where('id', $request->nid)
+                ->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
         $post = StudentPosts::with('user','comments')->findOrFail($id);
         return view('pages.userdash.singlepost', compact('post'));
     }

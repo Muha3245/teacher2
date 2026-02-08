@@ -25,6 +25,7 @@ class User extends Authenticatable
         'ip_address',
         'is_blocked',
         'google_id',
+        'coins',
     ];
 
     /**

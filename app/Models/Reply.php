@@ -10,7 +10,8 @@ class Reply extends Model
         'comment_id',
         'user_id',
         'content',
-        'seen_at'
+        'seen_at',
+        'parent_id',
     ];
 
     public function comment()
